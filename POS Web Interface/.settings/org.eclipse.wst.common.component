@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="POS Web Interface">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <dependent-module archiveName="POS Domain.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/POS Domain/POS Domain">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="POS_Web_Interface"/>
+        <property name="java-output-path" value="/POS Web Interface/build/classes"/>
+    </wb-module>
+</project-modules>

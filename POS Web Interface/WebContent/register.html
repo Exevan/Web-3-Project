@@ -23,8 +23,27 @@
 
 		</header>
 		<main>
-			<form>
-				<
+			<form method="POST" action="Controller">
+				<p>
+					<label for="first">Firstname:</label>
+					<input type="text" id="first" name="first" required>
+				</p>
+				<p>
+					<label for="last">Lastname:</label>
+					<input type="text" id="last" name="last" required>
+				</p>
+				<p>
+					<label for="mail">E-mail:</label>
+					<input type="text" id="mail" name="mail" required>
+				</p>
+				<p>
+					<label for="passwd">Password:</label>
+					<input type="text" id="passwd" name="passwd" required>
+				</p>
+				
+				<input type="hidden" name="action" value="register">
+				
+				<input type="submit" value="Register">
 			</form>
 		</main>
 		<footer> &copy; Webontwikkeling 3, UC Leuven-Limburg </footer>
