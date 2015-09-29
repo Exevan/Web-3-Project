@@ -9,12 +9,12 @@ public class PersonRepository {
 	private Map<String, Person> persons = new HashMap<String, Person>();
 	
 	public PersonRepository () {
-		Person administrator = new Person("admin@ucll.be", "t", "Ad", "Ministrator");
-		add(administrator);
+		//Person administrator = new Person("admin@ucll.be", "t", "Ad", "Ministrator");
+		//add(administrator);
 	}
 	
 	public Person get(String personId){
-		if(personId == null){
+		if(personId == null || personId.equals("")){
 			throw new IllegalArgumentException("No id given");
 		}
 		return persons.get(personId);
