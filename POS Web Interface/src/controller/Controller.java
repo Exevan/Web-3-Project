@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import domain.person.Person;
-import domain.person.PersonService;
+import domain.Person;
+import domain.PersonService;
 
 /**
  * Servlet implementation class Controller

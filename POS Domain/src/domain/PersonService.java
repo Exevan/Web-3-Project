@@ -1,4 +1,4 @@
-package domain.person;
+package domain;
 
 import java.util.List;
 
