@@ -17,11 +17,12 @@
 			<nav>
 				<ul>
 					<li><a href="Controller">Home</a></li>
-					<li id="actual"><a href="Controller?action=overview">Overview</a></li>
+					<li><a href="Controller?action=useroverview">Users</a></li>
+					<li><a href="Controller?action=productoverview">Products</a></li>
 					<li><a href="Controller?action=signUp">Sign up</a></li>
 				</ul>
 			</nav>
-			<h2>Overview</h2>
+			<h2>Users</h2>
 
 		</header>
 		<main>
@@ -38,7 +39,7 @@
 				<td>${person.lastName}</td>
 			</tr>
 			</c:forEach>
-			<caption>Users Overview</caption>
+			<caption>User Overview</caption>
 		</table>
 		</main>
 		<footer> &copy; Webontwikkeling 3, UC Leuven-Limburg </footer>

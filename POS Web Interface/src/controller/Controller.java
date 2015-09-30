@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import domain.Person;
-import domain.PersonService;
+import domain.person.Person;
+import domain.person.PersonService;
+import domain.product.Product;
+import domain.product.ProductService;
 
 /**
  * Servlet implementation class Controller
@@ -19,6 +21,7 @@ import domain.PersonService;
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private PersonService personService;
+	private ProductService productService;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -29,6 +32,10 @@ public class Controller extends HttpServlet {
         personService.addPerson(new Person("milan.sanders@ucll.be", "pw001", "Milan", "Sanders"));
         personService.addPerson(new Person("wouter.dumoulin@ucll.be", "pw002", "Wouter", "Dumoulin"));
         personService.addPerson(new Person("senne.malcorps@ucll.be", "pw003", "Senne", "Malcorps"));
+        
+        productService = new ProductService();
+        productService.addProduct(new Product("BTO 17CL58", "BTO's main series laptop", 1200));
+        productService.addProduct(new Product("Alienware 17", "High-end alienware laptop", 2400));
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,8 +51,11 @@ public class Controller extends HttpServlet {
 		action = (action == null) ? "home" : action;
 		switch(action) {
 	
-		case "overview":
-			processOverview(request, response);
+		case "useroverview":
+			processUserOverview(request, response);
+			break;
+		case "productoverview":
+			processProductOverview(request, response);
 			break;
 		case "signUp": //go to the page with the form
 			request.getRequestDispatcher("register.html").forward(request, response);
@@ -68,10 +78,17 @@ public class Controller extends HttpServlet {
 		}
 	}
 	
-	private void processOverview(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void processUserOverview(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Person> persons = personService.getPersons();
 		request.setAttribute("persons", persons);		
-		request.getRequestDispatcher("overview.jsp").forward(request, response);
+		request.getRequestDispatcher("useroverview.jsp").forward(request, response);
 	}
+	
+	private void processProductOverview(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		List<Product> products = productService.getProducts();
+		request.setAttribute("products", products);		
+		request.getRequestDispatcher("productoverview.jsp").forward(request, response);
+	}
+	
 
 }

@@ -1,4 +1,4 @@
-package domain;
+package domain.person;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,9 +32,7 @@ public class Person {
 			throw new IllegalArgumentException("Email not valid");
 		}
 		this.userId = userId;
-	}
-
-	
+	}	
 	
 	public String getUserId() {
 		return userId;
