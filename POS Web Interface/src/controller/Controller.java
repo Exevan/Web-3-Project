@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import db.WebshopDB;
 import domain.person.Person;
 import domain.person.PersonService;
 import domain.product.Product;
@@ -24,7 +23,6 @@ public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private PersonService personService;
 	private ProductService productService;
-	private WebshopDB db;
        
     /**
      * @throws SQLException 
@@ -32,15 +30,16 @@ public class Controller extends HttpServlet {
      */
     public Controller() throws SQLException {
         super();
-        db = new WebshopDB();
-        personService = new PersonService(db);
-        personService.addPerson(new Person("milan.sanders@ucll.be", "pw001", "Milan", "Sanders"));
-        personService.addPerson(new Person("wouter.dumoulin@ucll.be", "pw002", "Wouter", "Dumoulin"));
-        personService.addPerson(new Person("senne.malcorps@ucll.be", "pw003", "Senne", "Malcorps"));
+        personService = new PersonService();
+        productService = new ProductService();
         
-        productService = new ProductService(db);
-        productService.addProduct(new Product("BTO 17CL58", "BTO's main series laptop", 1200));
-        productService.addProduct(new Product("Alienware 17", "High-end alienware laptop", 2400));
+//        //pre-populate, not a good idea when working with a db
+//        personService.addPerson(new Person("milan.sanders@ucll.be", "pw001", "Milan", "Sanders"));
+//        personService.addPerson(new Person("wouter.dumoulin@ucll.be", "pw002", "Wouter", "Dumoulin"));
+//        personService.addPerson(new Person("senne.malcorps@ucll.be", "pw003", "Senne", "Malcorps"));
+//        
+//        productService.addProduct(new Product("BTO 17CL58", "BTO's main series laptop", 1200));
+//        productService.addProduct(new Product("Alienware 17", "High-end alienware laptop", 2400));
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

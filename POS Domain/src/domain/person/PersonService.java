@@ -1,5 +1,6 @@
 package domain.person;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import db.*;
@@ -7,8 +8,8 @@ import db.*;
 public class PersonService {
 	private PersonDbRepository personDbRepository;
 
-	public PersonService(WebshopDB db){
-		personDbRepository = new PersonDbRepository(db);
+	public PersonService() throws SQLException{
+		personDbRepository = new PersonDbRepository();
 	}
 	
 	public Person getPerson(String personId) {

@@ -1,5 +1,6 @@
 package domain.product;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import db.ProductDbRepository;
@@ -8,8 +9,8 @@ import db.WebshopDB;
 public class ProductService {
 	private ProductDbRepository productRepository;
 
-	public ProductService(WebshopDB db){
-		productRepository = new ProductDbRepository(db);
+	public ProductService() throws SQLException{
+		productRepository = new ProductDbRepository();
 	}
 	
 	public Product getProduct(String productName) {
