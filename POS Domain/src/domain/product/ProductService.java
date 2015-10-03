@@ -2,10 +2,14 @@ package domain.product;
 
 import java.util.List;
 
-public class ProductService {
-	private ProductRepository productRepository = new ProductRepository();
+import db.ProductDbRepository;
+import db.WebshopDB;
 
-	public ProductService(){
+public class ProductService {
+	private ProductDbRepository productRepository;
+
+	public ProductService(WebshopDB db){
+		productRepository = new ProductDbRepository(db);
 	}
 	
 	public Product getProduct(String productName) {
@@ -28,7 +32,7 @@ public class ProductService {
 		getProductRepository().delete(productName);
 	}
 
-	private ProductRepository getProductRepository() {
+	private ProductDbRepository getProductRepository() {
 		return productRepository;
 	}
 }

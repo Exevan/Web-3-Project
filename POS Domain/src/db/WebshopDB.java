@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class WebshopDB {
 	
-	Statement statement;
+	private Statement statement;
 	
 	public WebshopDB() throws SQLException {
 		String password = ""; //TODO get password

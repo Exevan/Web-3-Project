@@ -2,10 +2,13 @@ package domain.person;
 
 import java.util.List;
 
-public class PersonService {
-	private PersonRepository personRepository = new PersonRepository();
+import db.*;
 
-	public PersonService(){
+public class PersonService {
+	private PersonDbRepository personDbRepository;
+
+	public PersonService(WebshopDB db){
+		personDbRepository = new PersonDbRepository(db);
 	}
 	
 	public Person getPerson(String personId) {
@@ -28,7 +31,7 @@ public class PersonService {
 		getPersonRepository().delete(id);
 	}
 
-	private PersonRepository getPersonRepository() {
-		return personRepository;
+	private PersonDbRepository getPersonRepository() {
+		return personDbRepository;
 	}
 }

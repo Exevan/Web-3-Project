@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import db.WebshopDB;
 import domain.person.Person;
 import domain.person.PersonService;
 import domain.product.Product;
@@ -22,18 +24,21 @@ public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private PersonService personService;
 	private ProductService productService;
+	private WebshopDB db;
        
     /**
+     * @throws SQLException 
      * @see HttpServlet#HttpServlet()
      */
-    public Controller() {
+    public Controller() throws SQLException {
         super();
-        personService = new PersonService();
+        db = new WebshopDB();
+        personService = new PersonService(db);
         personService.addPerson(new Person("milan.sanders@ucll.be", "pw001", "Milan", "Sanders"));
         personService.addPerson(new Person("wouter.dumoulin@ucll.be", "pw002", "Wouter", "Dumoulin"));
         personService.addPerson(new Person("senne.malcorps@ucll.be", "pw003", "Senne", "Malcorps"));
         
-        productService = new ProductService();
+        productService = new ProductService(db);
         productService.addProduct(new Product("BTO 17CL58", "BTO's main series laptop", 1200));
         productService.addProduct(new Product("Alienware 17", "High-end alienware laptop", 2400));
     }
