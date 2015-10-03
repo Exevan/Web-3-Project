@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import domain.person.*;
@@ -23,21 +24,33 @@ public class PersonDbRepository {
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, email);
 		ResultSet result = statement.executeQuery();
-		// this will be the hashed password, but it shouldn't matter
-		// It actually is what we want since passwords shouldn't be kept in clear text ANYWHERE
 		String password = result.getString("password");
 		String firstname = result.getString("firstname");
 		String lastname = result.getString("lastnaam"); // great job Wouter
 		return new Person(email, password, firstname, lastname);
 	}
 
-	public List<Person> getAll() {
-		// TODO implement
-		return null;
+	public List<Person> getAll() throws SQLException {
+		ResultSet result = connection.createStatement().executeQuery("SELECT * FROM r0376333_r0296118.person");
+		List<Person> list = new ArrayList<>();
+		while (result.next()) {
+			String email = result.getString("email");
+			String password = result.getString("password");
+			String firstname = result.getString("firstname");
+			String lastname = result.getString("lastnaam");
+			list.add(new Person(email, password, firstname, lastname));
+		}
+		return list;
 	}
 
-	public void add(Person person) {
-		// TODO implement, don't forget to hash passwords
+	public void add(Person person) throws SQLException {
+		String sql = "INSERT INTO r0376333_r0296118.person (email, password, firstname, lastnaam) VALUES (?, ?, ?, ?)";
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setString(1, person.getUserId());
+		statement.setString(2, person.getPassword());
+		statement.setString(3, person.getFirstName());
+		statement.setString(4, person.getLastName());
+		statement.execute();
 	}
 
 	public void update(Person person) {

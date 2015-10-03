@@ -11,7 +11,7 @@ public class Person {
 
 	public Person(String userId, String password, String firstName, String lastName) {
 		setUserId(userId);
-		setPassword(password);
+		setPassword(password); // TODO encrypt here
 		setFirstName(firstName);
 		setLastName(lastName);
 	}
@@ -38,7 +38,7 @@ public class Person {
 		return userId;
 	}
 	
-	private String getPassword() {
+	public String getPassword() {
 		return password;
 	}
 	

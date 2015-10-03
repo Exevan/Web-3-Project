@@ -13,15 +13,15 @@ public class ProductService {
 		productRepository = new ProductDbRepository();
 	}
 	
-	public Product getProduct(String productName) {
+	public Product getProduct(String productName) throws SQLException {
 		return getProductRepository().get(productName);
 	}
 
-	public List<Product> getProducts() {
+	public List<Product> getProducts() throws SQLException {
 		return getProductRepository().getAll();
 	}
 
-	public void addProduct(Product product) {
+	public void addProduct(Product product) throws SQLException {
 		getProductRepository().add(product);
 	}
 

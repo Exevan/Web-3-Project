@@ -16,11 +16,11 @@ public class PersonService {
 		return getPersonRepository().get(personId);
 	}
 
-	public List<Person> getPersons() {
+	public List<Person> getPersons() throws SQLException {
 		return getPersonRepository().getAll();
 	}
 
-	public void addPerson(Person person) {
+	public void addPerson(Person person) throws SQLException {
 		getPersonRepository().add(person);
 	}
 
