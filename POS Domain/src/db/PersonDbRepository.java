@@ -17,13 +17,17 @@ public class PersonDbRepository {
 	}
 
 	public Person get(String email) throws SQLException {
+		// We could ask for email and pass here. It would be more secure, but it's not as flexible.
+		// I will think about this
 		String sql = "SELECT * FROM r0376333_r0296118.person WHERE email = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, email);
 		ResultSet result = statement.executeQuery();
+		// this will be the hashed password, but it shouldn't matter
+		// It actually is what we want since passwords shouldn't be kept in clear text ANYWHERE
 		String password = result.getString("password");
 		String firstname = result.getString("firstname");
-		String lastname = result.getString("lastnaam");
+		String lastname = result.getString("lastnaam"); // great job Wouter
 		return new Person(email, password, firstname, lastname);
 	}
 
@@ -33,7 +37,7 @@ public class PersonDbRepository {
 	}
 
 	public void add(Person person) {
-		// TODO implement
+		// TODO implement, don't forget to hash passwords
 	}
 
 	public void update(Person person) {
