@@ -1,17 +1,17 @@
 package db;
 
+import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 import domain.product.*;
 
 public class ProductDbRepository {
 
-	private Statement statement;
+	private Connection connection;
 
 	public ProductDbRepository() throws SQLException {
-		this.statement = WebshopDB.createStatement();
+		this.connection = WebshopDB.createConnection();
 	}
 
 	public Product get(String productName) {

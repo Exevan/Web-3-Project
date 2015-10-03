@@ -3,12 +3,11 @@ package db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
 
 public abstract class WebshopDB {
-	
-	public static Statement createStatement() throws SQLException {
+
+	public static Connection createConnection() throws SQLException {
 		String password = ""; // TODO get password
 		String userid = ""; // TODO get ID
 		Properties properties = new Properties();
@@ -20,7 +19,6 @@ public abstract class WebshopDB {
 				"org.postgresql.ssl.NonValidatingFactory");
 
 		Connection connection = DriverManager.getConnection(url, properties);
-		Statement statement = connection.createStatement();
-		return statement;
+		return connection;
 	}
 }

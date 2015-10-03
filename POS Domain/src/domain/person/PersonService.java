@@ -12,7 +12,7 @@ public class PersonService {
 		personDbRepository = new PersonDbRepository();
 	}
 	
-	public Person getPerson(String personId) {
+	public Person getPerson(String personId) throws SQLException {
 		return getPersonRepository().get(personId);
 	}
 
