@@ -24,11 +24,11 @@ public class PersonService {
 		getPersonRepository().add(person);
 	}
 
-	public void updatePersons(Person person) {
+	public void updatePersons(Person person) throws SQLException {
 		getPersonRepository().update(person);
 	}
 
-	public void deletePerson(String id) {
+	public void deletePerson(String id) throws SQLException {
 		getPersonRepository().delete(id);
 	}
 

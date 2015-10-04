@@ -25,11 +25,11 @@ public class ProductService {
 		getProductRepository().add(product);
 	}
 
-	public void updateProduct(Product product) {
+	public void updateProduct(Product product) throws SQLException {
 		getProductRepository().update(product);
 	}
 
-	public void deleteProduct(String productName) {
+	public void deleteProduct(String productName) throws SQLException {
 		getProductRepository().delete(productName);
 	}
 
