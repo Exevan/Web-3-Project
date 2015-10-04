@@ -17,15 +17,14 @@ public class PersonDbRepository {
 	private static final String EMAIL_FIELD = "email";
 	private static final String PASSWORD_FIELD = "password";
 	private static final String FIRSTNAME_FIELD = "firstname";
-	private static final String LASTNAME_FIELD = "firstnaam";
+	private static final String LASTNAME_FIELD = "lastnaam"; // great job Wouter
 
 	public PersonDbRepository() throws SQLException {
 		this.connection = WebshopDB.createConnection();
 	}
 
 	public Person get(String email) throws SQLException {
-		// We could ask for email and pass here. It would be more secure, but
-		// it's not as flexible.
+		// We could ask for email and pass here. It would be more secure, but it's not as flexible.
 		// I will think about this
 		String sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + EMAIL_FIELD
 				+ " = ?";
@@ -34,7 +33,7 @@ public class PersonDbRepository {
 		ResultSet result = statement.executeQuery();
 		String password = result.getString(PASSWORD_FIELD);
 		String firstname = result.getString(FIRSTNAME_FIELD);
-		String lastname = result.getString(LASTNAME_FIELD); // great job Wouter
+		String lastname = result.getString(LASTNAME_FIELD);
 		return new Person(email, password, firstname, lastname);
 	}
 

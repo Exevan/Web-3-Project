@@ -8,12 +8,10 @@ import java.util.Properties;
 public abstract class WebshopDB {
 
 	public static Connection createConnection() throws SQLException {
-		String password = ""; // TODO get password
-		String userid = ""; // TODO get ID
 		Properties properties = new Properties();
 		String url = "jdbc:postgresql://gegevensbanken.khleuven.be:51516/webontwerp";
-		properties.setProperty("user", userid);
-		properties.setProperty("password", password);
+		properties.setProperty("user", "");
+		properties.setProperty("password", "");
 		properties.setProperty("ssl", "true");
 		properties.setProperty("sslfactory",
 				"org.postgresql.ssl.NonValidatingFactory");
