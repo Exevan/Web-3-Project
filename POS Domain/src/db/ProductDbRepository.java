@@ -53,7 +53,7 @@ public class ProductDbRepository {
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, product.getName());
 		statement.setString(2, product.getDescription());
-		statement.setString(3, Double.toString(product.getPrice()));
+		statement.setDouble(3, product.getPrice());
 		statement.execute();
 	}
 

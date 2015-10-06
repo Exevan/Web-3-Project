@@ -15,9 +15,8 @@
 			<nav>
 				<ul>
 					<li><a href="Controller">Home</a></li>
-					<li><a href="Controller?action=useroverview">Users</a></li>
+					<li id="actual"><a href="Controller?action=useroverview">Users</a></li>
 					<li><a href="Controller?action=productoverview">Products</a></li>
-					<li id="actual"><a href="Controller?action=signUp">Sign up</a></li>
 				</ul>
 			</nav>
 			<h2>Register</h2>
@@ -41,7 +40,7 @@
 				<label for="passwd">Password:</label>
 				<input type="text" id="passwd" name="passwd" required>
 			</p>
-			<input type="hidden" name="action" value="register">
+			<input type="hidden" name="action" value="adduser_complete">
 			<input type="submit" value="Register">
 		</form>
 		</main>

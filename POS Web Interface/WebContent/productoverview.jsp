@@ -19,13 +19,13 @@
 					<li><a href="Controller">Home</a></li>
 					<li><a href="Controller?action=useroverview">Users</a></li>
 					<li id="actual"><a href="Controller?action=productoverview">Products</a></li>
-					<li><a href="Controller?action=signUp">Sign up</a></li>
 				</ul>
 			</nav>
 			<h2>Products</h2>
 
 		</header>
 		<main>
+		<a href="Controller?action=addproduct_start">New product</a>
 		<table>	
 			<tr>
 				<th>Product</th>

@@ -66,17 +66,24 @@ public class Controller extends HttpServlet {
 
 			case "useroverview":
 				processUserOverview(request, response);
-				break;
+				break;				
 			case "productoverview":
 				processProductOverview(request, response);
 				break;
-			case "signUp": // go to the page with the form
+			case "adduser_start": // go to the page with the form
 				request.getRequestDispatcher("register.html").forward(request,
 						response);
 				break;
-			case "register": 
+			case "adduser_complete": 
 				processRegister(request, response);
+				break;				
+			case "addproduct_start":
+				request.getRequestDispatcher("addproduct.html").forward(request,
+						response);
 				break;
+			case "addproduct_complete":
+				processAddProduct(request, response);
+				break;	
 			case "home":
 				request.getRequestDispatcher("index.html").forward(request,
 						response);
@@ -106,21 +113,26 @@ public class Controller extends HttpServlet {
 
 	private void processRegister(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException, SQLException {
-		// This is where the actual registration takes place
-		// init
-		String firstName,
-		lastName,
-		email,
-		password;
-		// grab stuff from request
-		firstName = request.getParameter("first");
-		lastName = request.getParameter("last");
-		email = request.getParameter("mail");
-		password = request.getParameter("passwd");
-		// create, also errors get thrown
+		String firstName = request.getParameter("first");
+		String lastName = request.getParameter("last");
+		String email = request.getParameter("mail");
+		String password = request.getParameter("passwd");
+		
 		Person person = new Person(email, password, firstName, lastName);
 		personService.addPerson(person);
-		// go back home by falling through the case, clever huh?
+
+		request.getRequestDispatcher("useroverview.html").forward(request, response);
 	}
 
+	private void processAddProduct(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException, SQLException {
+		String name = request.getParameter("name");
+		String desc = request.getParameter("desc");
+		double price = Double.parseDouble(request.getParameter("price"));
+		
+		Product product = new Product(name, desc, price);
+		productService.addProduct(product);
+		
+		request.getRequestDispatcher("productoverview.html").forward(request, response);
+	}
 }
