@@ -74,22 +74,9 @@ public class Controller extends HttpServlet {
 				request.getRequestDispatcher("register.html").forward(request,
 						response);
 				break;
-			case "register": // This is where the actual registration takes
-								// place
-				// init
-				String firstName,
-				lastName,
-				email,
-				password;
-				// grab stuff from request
-				firstName = request.getParameter("first");
-				lastName = request.getParameter("last");
-				email = request.getParameter("mail");
-				password = request.getParameter("passwd");
-				// create, also errors get thrown
-				Person person = new Person(email, password, firstName, lastName);
-				personService.addPerson(person);
-				// go back home by falling through the case, clever huh?
+			case "register": 
+				processRegister(request, response);
+				break;
 			case "home":
 				request.getRequestDispatcher("index.html").forward(request,
 						response);
@@ -115,6 +102,25 @@ public class Controller extends HttpServlet {
 		request.setAttribute("products", products);
 		request.getRequestDispatcher("productoverview.jsp").forward(request,
 				response);
+	}
+
+	private void processRegister(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException, SQLException {
+		// This is where the actual registration takes place
+		// init
+		String firstName,
+		lastName,
+		email,
+		password;
+		// grab stuff from request
+		firstName = request.getParameter("first");
+		lastName = request.getParameter("last");
+		email = request.getParameter("mail");
+		password = request.getParameter("passwd");
+		// create, also errors get thrown
+		Person person = new Person(email, password, firstName, lastName);
+		personService.addPerson(person);
+		// go back home by falling through the case, clever huh?
 	}
 
 }
