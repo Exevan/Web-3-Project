@@ -1,34 +1,39 @@
 package domain.product;
 
+import java.sql.SQLException;
 import java.util.List;
 
-public class ProductService {
-	private ProductRepository productRepository = new ProductRepository();
+import db.ProductDbRepository;
+import db.WebshopDB;
 
-	public ProductService(){
+public class ProductService {
+	private ProductDbRepository productRepository;
+
+	public ProductService() throws SQLException{
+		productRepository = new ProductDbRepository();
 	}
 	
-	public Product getProduct(String productName) {
+	public Product getProduct(String productName) throws SQLException {
 		return getProductRepository().get(productName);
 	}
 
-	public List<Product> getProducts() {
+	public List<Product> getProducts() throws SQLException {
 		return getProductRepository().getAll();
 	}
 
-	public void addProduct(Product product) {
+	public void addProduct(Product product) throws SQLException {
 		getProductRepository().add(product);
 	}
 
-	public void updateProduct(Product product) {
+	public void updateProduct(Product product) throws SQLException {
 		getProductRepository().update(product);
 	}
 
-	public void deleteProduct(String productName) {
+	public void deleteProduct(String productName) throws SQLException {
 		getProductRepository().delete(productName);
 	}
 
-	private ProductRepository getProductRepository() {
+	private ProductDbRepository getProductRepository() {
 		return productRepository;
 	}
 }

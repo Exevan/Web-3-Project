@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 public class PersonRepository {
-	private Map<String, Person> persons = new HashMap<String, Person>();
+	private Map<String, Person> persons;
 
 	public PersonRepository () {
-		//Person administrator = new Person("admin@ucll.be", "t", "Ad", "Ministrator");
-		//add(administrator);
+		persons = new HashMap<String, Person>();
 	}
 
 	public Person get(String personId){
