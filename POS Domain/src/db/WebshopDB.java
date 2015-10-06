@@ -9,7 +9,7 @@ public abstract class WebshopDB {
 
 	public static Connection createConnection() throws SQLException {
 		Properties properties = new Properties();
-		String url = "jdbc:postgresql://gegevensbanken.khleuven.be:51516/webontwerp";
+		String url = "jdbc:postgresql://gegevensbanken.khleuven.be:51516/2TX32";
 		properties.setProperty("user", "");
 		properties.setProperty("password", "");
 		properties.setProperty("ssl", "true");
