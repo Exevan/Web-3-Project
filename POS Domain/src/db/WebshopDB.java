@@ -19,4 +19,6 @@ public abstract class WebshopDB {
 		Connection connection = DriverManager.getConnection(url, properties);
 		return connection;
 	}
+	
+	//Allahu Akbar!!!
 }
