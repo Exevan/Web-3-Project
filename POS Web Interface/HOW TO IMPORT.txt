@@ -2,5 +2,5 @@
 2	configure as faceted project
 3	add Dynamic Web Module and Javascript to facets
 4	make sure to use Tomcat V8.0 and Java 1.8
-5	import dmain project
+5	import domain project
 6	add domain project to deployment descriptors
