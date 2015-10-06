@@ -62,7 +62,7 @@ public class ProductDbRepository {
 				+ " = ?, " + PRICE_FIELD + " = ? WHERE " + NAME_FIELD + " = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, product.getDescription());
-		statement.setString(2, Double.toString(product.getPrice()));
+		statement.setDouble(2, product.getPrice());
 		statement.setString(3, product.getName());
 		statement.execute();
 	}

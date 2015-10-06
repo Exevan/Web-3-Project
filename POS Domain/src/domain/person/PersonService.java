@@ -24,7 +24,7 @@ public class PersonService {
 		getPersonRepository().add(person);
 	}
 
-	public void updatePersons(Person person) throws SQLException {
+	public void updatePerson(Person person) throws SQLException {
 		getPersonRepository().update(person);
 	}
 

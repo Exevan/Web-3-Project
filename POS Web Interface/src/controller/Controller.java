@@ -76,14 +76,42 @@ public class Controller extends HttpServlet {
 				break;
 			case "adduser_complete": 
 				processRegister(request, response);
-				break;				
+				break;
+			case "deleteperson_start":
+				request.setAttribute("person", personService.getPerson(request.getParameter("mail")));
+				request.getRequestDispatcher("deleteperson.jsp").forward(request, response);
+				break;
+			case "deleteperson_complete":
+				processPersonDelete(request, response);
+				break;
+			case "updateperson_start":
+				request.setAttribute("person", personService.getPerson(request.getParameter("mail")));
+				request.getRequestDispatcher("updateperson.jsp").forward(request, response);
+				break;
+			case "updateperson_complete":
+				processPersonUpdate(request, response);
+				break;
 			case "addproduct_start":
 				request.getRequestDispatcher("addproduct.html").forward(request,
 						response);
 				break;
 			case "addproduct_complete":
 				processAddProduct(request, response);
-				break;	
+				break;
+			case "deleteproduct_start":
+				request.setAttribute("product", productService.getProduct(request.getParameter("name")));
+				request.getRequestDispatcher("deleteproduct.jsp").forward(request, response);
+				break;
+			case "deleteproduct_complete":
+				processProductDelete(request, response);
+				break;
+			case "updateproduct_start":
+				request.setAttribute("product", productService.getProduct(request.getParameter("name")));
+				request.getRequestDispatcher("updateproduct.jsp").forward(request, response);
+				break;
+			case "updateproduct_complete":
+				processProductUpdate(request, response);
+				break;
 			case "home":
 				request.getRequestDispatcher("index.html").forward(request,
 						response);
@@ -134,5 +162,40 @@ public class Controller extends HttpServlet {
 		productService.addProduct(product);
 		
 		request.getRequestDispatcher("productoverview.html").forward(request, response);
+	}
+	
+	private void processProductDelete(HttpServletRequest request,
+			HttpServletResponse response) throws SQLException {
+		productService.deleteProduct(request.getParameter("name"));
+	}
+
+	private void processPersonDelete(HttpServletRequest request,
+			HttpServletResponse response) throws SQLException {
+		personService.deletePerson(request.getParameter("mail"));
+	}
+	
+	private void processProductUpdate(HttpServletRequest request,
+			HttpServletResponse response) throws SQLException, ServletException, IOException {
+		String name = request.getParameter("name");
+		String desc = request.getParameter("desc");
+		double price = Double.parseDouble(request.getParameter("price"));
+		
+		Product product = new Product(name, desc, price);
+		productService.updateProduct(product);
+		
+		request.getRequestDispatcher("productoverview.html").forward(request, response);
+	}
+
+	private void processPersonUpdate(HttpServletRequest request,
+			HttpServletResponse response) throws SQLException, ServletException, IOException {
+		String firstName = request.getParameter("first");
+		String lastName = request.getParameter("last");
+		String email = request.getParameter("mail");
+		String password = request.getParameter("passwd");
+		
+		Person person = new Person(email, password, firstName, lastName);
+		personService.updatePerson(person);
+
+		request.getRequestDispatcher("useroverview.html").forward(request, response);
 	}
 }
