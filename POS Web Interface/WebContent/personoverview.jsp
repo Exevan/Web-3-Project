@@ -7,24 +7,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Overview</title>
 <link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="css/${style}.css">
 </head>
 <body>
 	<div id="container">
-		<header>
-		<h1>
-			<span>User Management System</span>
-		</h1>
-		<nav>
-		<ul>
-			<li><a href="Controller">Home</a></li>
-			<li><a href="Controller?action=useroverview">Users</a></li>
-			<li><a href="Controller?action=productoverview">Products</a></li>
-		</ul>
-		</nav>
-		<h2>Users</h2>
-
-		</header>
-		<main> <a href="Controller?action=adduser_start">Sign up</a>
+		<jsp:include page="header.jsp">
+			<jsp:param name="title" value="Users"/>
+		</jsp:include>
+		<main> <a href="Controller?action=addperson_start">Sign up</a>
 		<table>
 			<tr>
 				<th>E-mail</th>
@@ -37,12 +27,12 @@
 					<td><c:out value="${person.firstName}" /></td>
 					<td><c:out value="${person.lastName}" /></td>
 					<td><form method="post" action="Controller">
-							<input type="hidden" name="action" value="deleteuser_start">
+							<input type="hidden" name="action" value="deleteperson_start">
 							<input type="hidden" name="mail" value="${person.userId}">
 							<input type="submit" value="delete">
 						</form></td>
 					<td><form method="post" action="Controller">
-							<input type="hidden" name="action" value="updateuser_start">
+							<input type="hidden" name="action" value="updateperson_start">
 							<input type="hidden" name="mail" value="${person.userId}">
 							<input type="submit" value="update">
 						</form></td>
@@ -51,7 +41,7 @@
 			<caption>User Overview</caption>
 		</table>
 		</main>
-		<footer> &copy; Webontwikkeling 3, UC Leuven-Limburg </footer>
+		<jsp:include page="footer.jsp"></jsp:include>
 	</div>
 </body>
 </html>

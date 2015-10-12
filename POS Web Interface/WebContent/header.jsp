@@ -5,17 +5,20 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="css/style.css">
-<link rel="stylesheet" type="text/css" href="css/${style}.css">
 </head>
 <body>
-	<div id="container">
-		<jsp:include page="header.jsp">
-			<jsp:param name="title" value="Users" />
-		</jsp:include>
-		<main> </main>
-		<jsp:include page="footer.jsp"></jsp:include>
-	</div>
+	<header>
+	<h1>
+		<span>User Management System</span>
+	</h1>
+	<nav>
+	<ul>
+		<li><a href="Controller">Home</a></li>
+		<li><a href="Controller?action=personoverview">Users</a></li>
+		<li><a href="Controller?action=productoverview">Products</a></li>
+	</ul>
+	</nav>
+	<h2>${param.title}</h2>
+	</header>
 </body>
 </html>

@@ -5,30 +5,24 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Delete Person</title>
+<title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="css/style.css">
+<c:if test="${empty style}" >
+ <c:set var="style" value="yellow" />
+</c:if>
 <link rel="stylesheet" type="text/css" href="css/${style}.css">
 </head>
 <body>
-	<div id="container">
+<div id="container">
 		<jsp:include page="header.jsp">
-			<jsp:param name="title" value="Delete person"/>
+			<jsp:param name="title" value="Home"/>
 		</jsp:include>
-		<main>
-		
-		<dl>
-		<dt>Name:</dt>
-		<dd>${person.firstName} ${person.lastName}</dd>
-		<dt>Email:</dt>
-		<dd>${person.userId}</dd>
-		</dl>
-		
-		<form>
-		<input type="hidden" name="action" value="deleteperson_complete">
-		<input type="submit" value="Delete">
-		</form>		
-		<a href="Controller?action=personoverview"><button type="button">Cancel</button></a>
-		</main>
+		<main> Sed ut perspiciatis unde omnis iste natus error sit
+		voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque
+		ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
+		dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
+		aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos
+		qui ratione voluptatem sequi nesciunt. </main>
 		<jsp:include page="footer.jsp"></jsp:include>
 	</div>
 </body>

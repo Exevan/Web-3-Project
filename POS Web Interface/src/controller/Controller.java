@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,8 @@ public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private PersonService personService;
 	private ProductService productService;
+	private String style;
+	private Cookie[] cookies;
 
 	/**
 	 * @throws SQLException
@@ -64,62 +67,71 @@ public class Controller extends HttpServlet {
 		try {
 			switch (action) {
 
-			case "useroverview":
+			case "personoverview":
 				processUserOverview(request, response);
-				break;				
+				break;
 			case "productoverview":
 				processProductOverview(request, response);
 				break;
-			case "adduser_start": // go to the page with the form
-				request.getRequestDispatcher("register.html").forward(request,
-						response);
+			case "addperson_start": // go to the page with the form
+				forward("register.jsp", request, response);
 				break;
-			case "adduser_complete": 
+			case "addperson_complete":
 				processRegister(request, response);
 				break;
 			case "deleteperson_start":
-				request.setAttribute("person", personService.getPerson(request.getParameter("mail")));
-				request.getRequestDispatcher("deleteperson.jsp").forward(request, response);
+				request.setAttribute("person",
+						personService.getPerson(request.getParameter("mail")));
+				forward("deleteperson.jsp", request, response);
 				break;
 			case "deleteperson_complete":
 				processPersonDelete(request, response);
 				break;
 			case "updateperson_start":
-				request.setAttribute("person", personService.getPerson(request.getParameter("mail")));
-				request.getRequestDispatcher("updateperson.jsp").forward(request, response);
+				request.setAttribute("person",
+						personService.getPerson(request.getParameter("mail")));
+				forward("updateperson.jsp", request, response);
 				break;
 			case "updateperson_complete":
 				processPersonUpdate(request, response);
 				break;
 			case "addproduct_start":
-				request.getRequestDispatcher("addproduct.html").forward(request,
-						response);
+				forward("addproduct.jsp", request, response);
 				break;
 			case "addproduct_complete":
 				processAddProduct(request, response);
 				break;
 			case "deleteproduct_start":
-				request.setAttribute("product", productService.getProduct(request.getParameter("name")));
-				request.getRequestDispatcher("deleteproduct.jsp").forward(request, response);
+				request.setAttribute("product",
+						productService.getProduct(request.getParameter("name")));
+				forward("deleteproduct.jsp", request, response);
 				break;
 			case "deleteproduct_complete":
 				processProductDelete(request, response);
 				break;
 			case "updateproduct_start":
-				request.setAttribute("product", productService.getProduct(request.getParameter("name")));
-				request.getRequestDispatcher("updateproduct.jsp").forward(request, response);
+				request.setAttribute("product",
+						productService.getProduct(request.getParameter("name")));
+				forward("updateproduct.jsp", request, response);
 				break;
 			case "updateproduct_complete":
 				processProductUpdate(request, response);
 				break;
 			case "home":
-				request.getRequestDispatcher("index.html").forward(request,
-						response);
+				forward("index.jsp", request, response);
 				break;
 			}
 		} catch (SQLException e) {
-			throw new RuntimeException(e.getMessage()); // very dirty, TODO ask lectors what do?
+			throw new RuntimeException(e.getMessage());
 		}
+	}
+
+	private String getStyle(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		for (Cookie cookie : cookies)
+			if (cookie.getName().equals("style"))
+				return cookie.getValue();
+		return "yellow";
 	}
 
 	private void processUserOverview(HttpServletRequest request,
@@ -127,43 +139,44 @@ public class Controller extends HttpServlet {
 			SQLException {
 		List<Person> persons = personService.getPersons();
 		request.setAttribute("persons", persons);
-		request.getRequestDispatcher("useroverview.jsp").forward(request,
-				response);
+		forward("personoverview.jsp", request, response);
 	}
 
 	private void processProductOverview(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException, SQLException {
+			HttpServletResponse response) throws ServletException, IOException,
+			SQLException {
 		List<Product> products = productService.getProducts();
 		request.setAttribute("products", products);
-		request.getRequestDispatcher("productoverview.jsp").forward(request,
-				response);
+		forward("productoverview.jsp", request, response);
 	}
 
 	private void processRegister(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException, SQLException {
+			HttpServletResponse response) throws ServletException, IOException,
+			SQLException {
 		String firstName = request.getParameter("first");
 		String lastName = request.getParameter("last");
 		String email = request.getParameter("mail");
 		String password = request.getParameter("passwd");
-		
+
 		Person person = new Person(email, password, firstName, lastName);
 		personService.addPerson(person);
 
-		request.getRequestDispatcher("useroverview.html").forward(request, response);
+		forward("personoverview.jsp", request, response);
 	}
 
 	private void processAddProduct(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException, SQLException {
+			HttpServletResponse response) throws ServletException, IOException,
+			SQLException {
 		String name = request.getParameter("name");
 		String desc = request.getParameter("desc");
 		double price = Double.parseDouble(request.getParameter("price"));
-		
+
 		Product product = new Product(name, desc, price);
 		productService.addProduct(product);
-		
-		request.getRequestDispatcher("productoverview.html").forward(request, response);
+
+		forward("productoverview.jsp", request, response);
 	}
-	
+
 	private void processProductDelete(HttpServletRequest request,
 			HttpServletResponse response) throws SQLException {
 		productService.deleteProduct(request.getParameter("name"));
@@ -173,29 +186,39 @@ public class Controller extends HttpServlet {
 			HttpServletResponse response) throws SQLException {
 		personService.deletePerson(request.getParameter("mail"));
 	}
-	
+
 	private void processProductUpdate(HttpServletRequest request,
-			HttpServletResponse response) throws SQLException, ServletException, IOException {
+			HttpServletResponse response) throws SQLException,
+			ServletException, IOException {
 		String name = request.getParameter("name");
 		String desc = request.getParameter("desc");
 		double price = Double.parseDouble(request.getParameter("price"));
-		
+
 		Product product = new Product(name, desc, price);
 		productService.updateProduct(product);
-		
-		request.getRequestDispatcher("productoverview.html").forward(request, response);
+
+		forward("productoverview.jsp", request, response);
 	}
 
 	private void processPersonUpdate(HttpServletRequest request,
-			HttpServletResponse response) throws SQLException, ServletException, IOException {
+			HttpServletResponse response) throws SQLException,
+			ServletException, IOException {
 		String firstName = request.getParameter("first");
 		String lastName = request.getParameter("last");
 		String email = request.getParameter("mail");
 		String password = request.getParameter("passwd");
-		
+
 		Person person = new Person(email, password, firstName, lastName);
 		personService.updatePerson(person);
 
-		request.getRequestDispatcher("useroverview.html").forward(request, response);
+		forward("personoverview.jsp", request, response);
+	}
+
+	private void forward(String destination, HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("style", getStyle(request));
+		System.out.println("going to " + destination + " with style " + style);
+		request.getRequestDispatcher(destination).forward(request,
+				response);
 	}
 }

@@ -7,23 +7,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="css/${style}.css">
 </head>
 <body>
 	<div id="container">
-		<header>
-			<h1>
-				<span>User Management System</span>
-			</h1>
-			<nav>
-				<ul>
-					<li><a href="Controller">Home</a></li>
-					<li><a href="Controller?action=useroverview">Users</a></li>
-					<li id="actual"><a href="Controller?action=productoverview">Products</a></li>
-				</ul>
-			</nav>
-			<h2>Products</h2>
-
-		</header>
+		<jsp:include page="header.jsp">
+			<jsp:param name="title" value="Products"/>
+		</jsp:include>
 		<main>
 		<a href="Controller?action=addproduct_start">New product</a>
 		<table>	
@@ -52,7 +42,7 @@
 			<caption>Product Overview</caption>
 		</table>
 		</main>
-		<footer> &copy; Webontwikkeling 3, UC Leuven-Limburg </footer>
+		<jsp:include page="footer.jsp"></jsp:include>
 	</div>
 </body>
 </html>
