@@ -9,11 +9,11 @@ import javax.swing.JOptionPane;
 
 public abstract class WebshopDB {
 
-	public static Connection createConnection() throws SQLException {
+	public static Connection createConnection(String username, String password) throws SQLException {
 		Properties properties = new Properties();
 		String url = "jdbc:postgresql://gegevensbanken.khleuven.be:51516/2TX32";
-		properties.setProperty("user", JOptionPane.showInputDialog("username"));
-		properties.setProperty("password", JOptionPane.showInputDialog("password"));
+		properties.setProperty("user", username);
+		properties.setProperty("password", password);
 		properties.setProperty("ssl", "true");
 		properties.setProperty("sslfactory",
 				"org.postgresql.ssl.NonValidatingFactory");

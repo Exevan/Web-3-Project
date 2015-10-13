@@ -19,8 +19,8 @@ public class PersonDbRepository {
 	private static final String FIRSTNAME_FIELD = "firstname";
 	private static final String LASTNAME_FIELD = "lastnaam"; // great job Wouter
 
-	public PersonDbRepository() throws SQLException {
-		this.connection = WebshopDB.createConnection();
+	public PersonDbRepository(String username, String password) throws SQLException {
+		this.connection = WebshopDB.createConnection(username, password);
 	}
 
 	public Person get(String email) throws SQLException {

@@ -33,8 +33,6 @@ public class Controller extends HttpServlet {
 	 */
 	public Controller() throws SQLException {
 		super();
-		personService = new PersonService();
-		productService = new ProductService();
 
 		// //pre-populate, not a good idea when working with a db
 		// personService.addPerson(new Person("milan.sanders@ucll.be", "pw001",
@@ -52,21 +50,32 @@ public class Controller extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		processRequest(request, response);
+		String action = request.getParameter("action");
+		processRequest(action, request, response);
 	}
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		processRequest(request, response);
+		String action = request.getParameter("action");
+		processRequest(action, request, response);
 	}
 
-	private void processRequest(HttpServletRequest request,
+	private void processRequest(String action, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		String action = request.getParameter("action");
+
+		if((personService == null || productService == null) && !action.equals("login")) {
+			request.setAttribute("prevaction", action);
+			forward("login.jsp", request, response); return;
+		}
+
 		action = (action == null) ? "home" : action;
+
 		try {
 			switch (action) {
 
+			case "login":
+				processLogin(request, response);
+				break;
 			case "personoverview":
 				processUserOverview(request, response);
 				break;
@@ -128,10 +137,26 @@ public class Controller extends HttpServlet {
 
 	private String getStyle(HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
-		for (Cookie cookie : cookies)
-			if (cookie.getName().equals("style"))
-				return cookie.getValue();
+		if (cookies != null) 
+			for (Cookie cookie : cookies)
+				if (cookie.getName().equals("style"))
+					return cookie.getValue();
 		return "yellow";
+	}
+
+	private void processLogin(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException,
+			SQLException {
+
+		String username = request.getParameter("username");
+		String password = request.getParameter("passwd");
+
+		personService = new PersonService(username, password);
+		productService = new ProductService(username, password);
+
+		String action = request.getParameter("prevaction");
+
+		processRequest(action, request, response);
 	}
 
 	private void processUserOverview(HttpServletRequest request,

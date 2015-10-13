@@ -19,8 +19,8 @@ public class ProductDbRepository {
 	private static final String DESCRIPTION_FIELD = "description";
 	private static final String PRICE_FIELD = "price";
 
-	public ProductDbRepository() throws SQLException {
-		this.connection = WebshopDB.createConnection();
+	public ProductDbRepository(String username, String password) throws SQLException {
+		this.connection = WebshopDB.createConnection(username, password);
 	}
 
 	public Product get(String name) throws SQLException {

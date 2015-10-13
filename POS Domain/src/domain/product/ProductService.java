@@ -9,8 +9,8 @@ import db.WebshopDB;
 public class ProductService {
 	private ProductDbRepository productRepository;
 
-	public ProductService() throws SQLException{
-		productRepository = new ProductDbRepository();
+	public ProductService(String username, String password) throws SQLException{
+		productRepository = new ProductDbRepository(username, password);
 	}
 	
 	public Product getProduct(String productName) throws SQLException {

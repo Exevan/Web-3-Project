@@ -8,8 +8,8 @@ import db.*;
 public class PersonService {
 	private PersonDbRepository personDbRepository;
 
-	public PersonService() throws SQLException{
-		personDbRepository = new PersonDbRepository();
+	public PersonService(String username, String password) throws SQLException{
+		personDbRepository = new PersonDbRepository(username, password);
 	}
 	
 	public Person getPerson(String personId) throws SQLException {
