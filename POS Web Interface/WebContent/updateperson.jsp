@@ -14,8 +14,31 @@
 		<jsp:include page="header.jsp">
 			<jsp:param name="title" value="Users" />
 		</jsp:include>
-		<main> </main>
-		<jsp:include page="footer.jsp"></jsp:include>
+		<main>
+			<form method="POST" action="Controller">
+			<p>
+				Email: ${person.userId}
+			</p>
+			<p>
+				<label for="first">Firstname:</label>
+				<input type="text" id="first" name="first" value="${person.firstName}" required>
+			</p>
+			<p>
+				<label for="last">Lastname:</label>
+				<input type="text" id="last" name="last" value="${person.lastName}" required>
+			</p>
+			<p>
+				<label for="passwd">Password:</label>
+				<input type="text" id="passwd" name="passwd" value="${person.person}" required>
+			</p>
+			<input type="hidden" name="mail" value="${person.userId}">
+			<input type="hidden" name="action" value="updateperson_complete">
+			<input type="submit" value="Update">
+		</form>
+		</main>
+		<jsp:include page="footer.jsp">
+			<jsp:param name="origin" value="updateperson.jsp"/>
+		</jsp:include>
 	</div>
 </body>
 </html>
