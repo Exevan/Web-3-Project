@@ -41,7 +41,9 @@
 			<caption>User Overview</caption>
 		</table>
 		</main>
-		<jsp:include page="footer.jsp"></jsp:include>
+		<jsp:include page="footer.jsp">
+			<jsp:param name="origin" value="personoverview.jsp"/>
+		</jsp:include>
 	</div>
 </body>
 </html>

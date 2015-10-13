@@ -33,7 +33,9 @@
 			<input type="submit" value="Register">
 		</form>
 		</main>
-		<jsp:include page="footer.jsp"></jsp:include>
+		<jsp:include page="footer.jsp">
+			<jsp:param name="origin" value="addproduct.jsp"/>
+		</jsp:include>
 	</div>
 </body>
 </html>

@@ -7,6 +7,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 </head>
 <body>
-	<footer> &copy; Webontwikkeling 3, UC Leuven-Limburg </footer>
+	<footer>
+		&copy; Webontwikkeling 3, UC Leuven-Limburg
+		<form method="POST" action="Controller?action=change_style&origin=${param.origin}">
+			<input type="submit" value="Verander stijl"/>
+		</form>
+	</footer>
 </body>
 </html>

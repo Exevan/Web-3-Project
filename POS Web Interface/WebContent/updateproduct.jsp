@@ -14,8 +14,27 @@
 		<jsp:include page="header.jsp">
 			<jsp:param name="title" value="Users" />
 		</jsp:include>
-		<main> </main>
-		<jsp:include page="footer.jsp"></jsp:include>
+		<main>
+		<form method="POST" action="Controller">
+			<p>
+				Product: ${product.name}
+			</p>
+			<p>
+				<label for="desc">Description:</label> <input type="text" id="desc"
+					name="desc" value="${product.description}" required>
+			</p>
+			<p>
+				<label for="price">Price:</label> <input type="text" id="price"
+					name="price" value="${product.price}" required>
+			</p>
+			<input type="hidden" id="name" name="name" value="${product.name}">
+			<input type="hidden" name="action" value="updateproduct_complete">
+			<input type="submit" value="Register">
+		</form>
+		</main>
+		<jsp:include page="footer.jsp">
+			<jsp:param name="origin" value="updateproduct.jsp" />
+		</jsp:include>
 	</div>
 </body>
 </html>

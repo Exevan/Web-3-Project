@@ -25,13 +25,16 @@
 		<dd>${product.price}</dd>
 		</dl>
 		
-		<form>
+		<form method="POST" action="Controller">
 		<input type="hidden" name="action" value="deleteproduct_complete">
+		<input type="hidden" name="name" value="${product.name}">
 		<input type="submit" value="Delete">
-		</form>		
-		<button type="button" formaction="Controller?action=productoverview">Cancel</button>
+		</form>
+		<a href="Controller?action=productoverview"><button type="button">Cancel</button></a>
 		</main>
-		<jsp:include page="footer.jsp"></jsp:include>
+		<jsp:include page="footer.jsp">
+			<jsp:param name="origin" value="deleteproduct.jsp"/>
+		</jsp:include>
 	</div>
 </body>
 </html>

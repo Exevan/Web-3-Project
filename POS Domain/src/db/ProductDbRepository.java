@@ -29,6 +29,7 @@ public class ProductDbRepository {
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, name);
 		ResultSet result = statement.executeQuery();
+		result.next();
 		String description = result.getString(DESCRIPTION_FIELD);
 		Double price = result.getDouble(PRICE_FIELD);
 		return new Product(name, description, price);

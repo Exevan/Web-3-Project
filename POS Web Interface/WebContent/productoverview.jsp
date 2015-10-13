@@ -42,7 +42,9 @@
 			<caption>Product Overview</caption>
 		</table>
 		</main>
-		<jsp:include page="footer.jsp"></jsp:include>
+		<jsp:include page="footer.jsp">
+			<jsp:param name="origin" value="productoverview.jsp"/>
+		</jsp:include>
 	</div>
 </body>
 </html>

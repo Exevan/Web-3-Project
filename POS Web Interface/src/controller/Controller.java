@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import jdk.nashorn.internal.ir.RuntimeNode.Request;
 import domain.person.Person;
 import domain.person.PersonService;
 import domain.product.Product;
@@ -126,6 +127,12 @@ public class Controller extends HttpServlet {
 			case "updateproduct_complete":
 				processProductUpdate(request, response);
 				break;
+			case "change_style":
+				changeStyle(request, response);
+				String origin = request.getParameter("origin");
+				System.out.println("origin: " + origin);
+				forward("index.jsp", request, response);
+				break;
 			case "home":
 				forward("index.jsp", request, response);
 				break;
@@ -133,6 +140,21 @@ public class Controller extends HttpServlet {
 		} catch (SQLException e) {
 			throw new RuntimeException(e.getMessage());
 		}
+	}
+
+	private void changeStyle(HttpServletRequest request, HttpServletResponse response) {
+		String new_style = "";
+		String old_style = getStyle(request);
+		switch (old_style) {
+		case "yellow":
+			new_style = "red";
+			break;
+		case "red":
+			new_style = "yellow";
+			break;
+		}
+		Cookie cookie = new Cookie("style", new_style);
+		response.addCookie(cookie);
 	}
 
 	private String getStyle(HttpServletRequest request) {

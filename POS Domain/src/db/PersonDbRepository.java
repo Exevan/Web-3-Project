@@ -31,6 +31,7 @@ public class PersonDbRepository {
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, email);
 		ResultSet result = statement.executeQuery();
+		result.next();
 		String password = result.getString(PASSWORD_FIELD);
 		String firstname = result.getString(FIRSTNAME_FIELD);
 		String lastname = result.getString(LASTNAME_FIELD);

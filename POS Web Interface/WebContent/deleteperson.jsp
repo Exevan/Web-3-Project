@@ -23,13 +23,16 @@
 		<dd>${person.userId}</dd>
 		</dl>
 		
-		<form>
+		<form method="POST" action="Controller">
 		<input type="hidden" name="action" value="deleteperson_complete">
+		<input type="hidden" name="mail" value="${person.userId}">
 		<input type="submit" value="Delete">
 		</form>		
 		<a href="Controller?action=personoverview"><button type="button">Cancel</button></a>
 		</main>
-		<jsp:include page="footer.jsp"></jsp:include>
+		<jsp:include page="footer.jsp">
+			<jsp:param name="origin" value="deleteperson.jsp"/>
+		</jsp:include>
 	</div>
 </body>
 </html>
