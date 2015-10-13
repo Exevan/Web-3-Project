@@ -30,11 +30,11 @@
 					name="price" required>
 			</p>
 			<input type="hidden" name="action" value="addproduct_complete">
-			<input type="submit" value="Register">
+			<input type="submit" value="Add">
 		</form>
 		</main>
 		<jsp:include page="footer.jsp">
-			<jsp:param name="origin" value="addproduct.jsp"/>
+			<jsp:param name="origin" value="addproduct_start"/>
 		</jsp:include>
 	</div>
 </body>

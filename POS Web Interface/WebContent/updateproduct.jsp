@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Update product</title>
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <link rel="stylesheet" type="text/css" href="css/${style}.css">
 </head>
@@ -29,11 +29,11 @@
 			</p>
 			<input type="hidden" id="name" name="name" value="${product.name}">
 			<input type="hidden" name="action" value="updateproduct_complete">
-			<input type="submit" value="Register">
+			<input type="submit" value="Update">
 		</form>
 		</main>
 		<jsp:include page="footer.jsp">
-			<jsp:param name="origin" value="updateproduct.jsp" />
+			<jsp:param name="origin" value="updateproduct_start" />
 		</jsp:include>
 	</div>
 </body>

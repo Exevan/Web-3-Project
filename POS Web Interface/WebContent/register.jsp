@@ -38,7 +38,7 @@
 		</form>
 		</main>
 		<jsp:include page="footer.jsp">
-			<jsp:param name="origin" value="register.jsp"/>
+			<jsp:param name="origin" value="addperson_start"/>
 		</jsp:include>
 	</div>
 </body>

@@ -42,7 +42,7 @@
 		</table>
 		</main>
 		<jsp:include page="footer.jsp">
-			<jsp:param name="origin" value="personoverview.jsp"/>
+			<jsp:param name="origin" value="personoverview"/>
 		</jsp:include>
 	</div>
 </body>

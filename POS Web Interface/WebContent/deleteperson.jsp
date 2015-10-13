@@ -31,7 +31,7 @@
 		<a href="Controller?action=personoverview"><button type="button">Cancel</button></a>
 		</main>
 		<jsp:include page="footer.jsp">
-			<jsp:param name="origin" value="deleteperson.jsp"/>
+			<jsp:param name="origin" value="deleteperson_start"/>
 		</jsp:include>
 	</div>
 </body>

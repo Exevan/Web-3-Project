@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Update person</title>
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <link rel="stylesheet" type="text/css" href="css/${style}.css">
 </head>
@@ -29,7 +29,7 @@
 			</p>
 			<p>
 				<label for="passwd">Password:</label>
-				<input type="text" id="passwd" name="passwd" value="${person.person}" required>
+				<input type="text" id="passwd" name="passwd" value="${person.password}" required>
 			</p>
 			<input type="hidden" name="mail" value="${person.userId}">
 			<input type="hidden" name="action" value="updateperson_complete">
@@ -37,7 +37,7 @@
 		</form>
 		</main>
 		<jsp:include page="footer.jsp">
-			<jsp:param name="origin" value="updateperson.jsp"/>
+			<jsp:param name="origin" value="updateperson_start"/>
 		</jsp:include>
 	</div>
 </body>

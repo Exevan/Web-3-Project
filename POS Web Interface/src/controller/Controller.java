@@ -25,8 +25,6 @@ public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private PersonService personService;
 	private ProductService productService;
-	private String style;
-	private Cookie[] cookies;
 
 	/**
 	 * @throws SQLException
@@ -51,25 +49,30 @@ public class Controller extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		String action = request.getParameter("action");
-		processRequest(action, request, response);
+		processRequest(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		String action = request.getParameter("action");
-		processRequest(action, request, response);
+		processRequest(request, response);
+	}
+	
+	private void processRequest(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		processRequest(request.getParameter("action"), request, response);
 	}
 
 	private void processRequest(String action, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		
+		action = (action == null) ? "home" : action;
 
-		if((personService == null || productService == null) && !action.equals("login")) {
+		if((personService == null || productService == null)) {
+			if (!action.equals("login")) {
 			request.setAttribute("prevaction", action);
 			forward("login.jsp", request, response); return;
+			}
 		}
-
-		action = (action == null) ? "home" : action;
 
 		try {
 			switch (action) {
@@ -130,8 +133,7 @@ public class Controller extends HttpServlet {
 			case "change_style":
 				changeStyle(request, response);
 				String origin = request.getParameter("origin");
-				System.out.println("origin: " + origin);
-				forward("index.jsp", request, response);
+				processRequest(origin, request, response);
 				break;
 			case "home":
 				forward("index.jsp", request, response);
@@ -154,15 +156,19 @@ public class Controller extends HttpServlet {
 			break;
 		}
 		Cookie cookie = new Cookie("style", new_style);
+		cookie.setMaxAge(60 * 60 * 24); //1 day
 		response.addCookie(cookie);
 	}
 
 	private String getStyle(HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
-		if (cookies != null) 
-			for (Cookie cookie : cookies)
-				if (cookie.getName().equals("style"))
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("style")) {
 					return cookie.getValue();
+				}
+			}
+		}
 		return "yellow";
 	}
 
@@ -208,7 +214,7 @@ public class Controller extends HttpServlet {
 		Person person = new Person(email, password, firstName, lastName);
 		personService.addPerson(person);
 
-		forward("personoverview.jsp", request, response);
+		processUserOverview(request, response);
 	}
 
 	private void processAddProduct(HttpServletRequest request,
@@ -221,17 +227,21 @@ public class Controller extends HttpServlet {
 		Product product = new Product(name, desc, price);
 		productService.addProduct(product);
 
-		forward("productoverview.jsp", request, response);
+		processProductOverview(request, response);
 	}
 
 	private void processProductDelete(HttpServletRequest request,
-			HttpServletResponse response) throws SQLException {
+			HttpServletResponse response) throws SQLException, ServletException, IOException {
 		productService.deleteProduct(request.getParameter("name"));
+		
+		processProductOverview(request, response);
 	}
 
 	private void processPersonDelete(HttpServletRequest request,
-			HttpServletResponse response) throws SQLException {
+			HttpServletResponse response) throws SQLException, ServletException, IOException {
 		personService.deletePerson(request.getParameter("mail"));
+		
+		processUserOverview(request, response);
 	}
 
 	private void processProductUpdate(HttpServletRequest request,
@@ -244,7 +254,7 @@ public class Controller extends HttpServlet {
 		Product product = new Product(name, desc, price);
 		productService.updateProduct(product);
 
-		forward("productoverview.jsp", request, response);
+		processProductOverview(request, response);
 	}
 
 	private void processPersonUpdate(HttpServletRequest request,
@@ -258,13 +268,13 @@ public class Controller extends HttpServlet {
 		Person person = new Person(email, password, firstName, lastName);
 		personService.updatePerson(person);
 
-		forward("personoverview.jsp", request, response);
+		processUserOverview(request, response);
 	}
 
 	private void forward(String destination, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		request.setAttribute("style", getStyle(request));
-		System.out.println("going to " + destination + " with style " + style);
+		String style = getStyle(request);
+		request.setAttribute("style", style);
 		request.getRequestDispatcher(destination).forward(request,
 				response);
 	}

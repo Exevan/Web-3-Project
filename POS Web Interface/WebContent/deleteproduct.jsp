@@ -33,7 +33,7 @@
 		<a href="Controller?action=productoverview"><button type="button">Cancel</button></a>
 		</main>
 		<jsp:include page="footer.jsp">
-			<jsp:param name="origin" value="deleteproduct.jsp"/>
+			<jsp:param name="origin" value="deleteproduct_start"/>
 		</jsp:include>
 	</div>
 </body>

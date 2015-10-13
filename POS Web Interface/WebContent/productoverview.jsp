@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Product overview</title>
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <link rel="stylesheet" type="text/css" href="css/${style}.css">
 </head>
@@ -43,7 +43,7 @@
 		</table>
 		</main>
 		<jsp:include page="footer.jsp">
-			<jsp:param name="origin" value="productoverview.jsp"/>
+			<jsp:param name="origin" value="productoverview"/>
 		</jsp:include>
 	</div>
 </body>

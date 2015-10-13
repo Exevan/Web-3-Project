@@ -18,7 +18,7 @@ public class RegisterTest {
 	@Before
 	public void setUp() {
 		driver=new FirefoxDriver();
-		driver.get("http://localhost:8080/week01Users/Controller?action=signUp");
+		driver.get("http://localhost:8080/POS_Web_Interface/Controller?action=signUp");
 	}
 	
 	@After

@@ -30,7 +30,9 @@
 			<input type="submit" value="Login">
 		</form>
 		</main>
-		<jsp:include page="footer.jsp"></jsp:include>
+		<jsp:include page="footer.jsp">
+			<jsp:param value="login" name="origin"/>
+		</jsp:include>
 	</div>
 </body>
 </html>

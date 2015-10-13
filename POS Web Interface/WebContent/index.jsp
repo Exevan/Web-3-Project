@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Home</title>
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <c:if test="${empty style}" >
  <c:set var="style" value="yellow" />
@@ -24,7 +24,7 @@
 		aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos
 		qui ratione voluptatem sequi nesciunt. </main>
 		<jsp:include page="footer.jsp">
-			<jsp:param name="origin" value="index.jsp"/>
+			<jsp:param name="origin" value="home"/>
 		</jsp:include>
 	</div>
 </body>
