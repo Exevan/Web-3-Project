@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,8 +141,10 @@ public class Controller extends HttpServlet {
 				forward("index.jsp", request, response);
 				break;
 			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e.getMessage());
+		} catch (SQLException e_1) {
+			throw new RuntimeException(e_1.getMessage());
+		} catch (NoSuchAlgorithmException e_2) {
+			throw new RuntimeException(e_2.getMessage());
 		}
 	}
 
@@ -191,7 +194,7 @@ public class Controller extends HttpServlet {
 
 	private void processUserOverview(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException,
-			SQLException {
+			SQLException, NoSuchAlgorithmException {
 		List<Person> persons = personService.getPersons();
 		request.setAttribute("persons", persons);
 		forward("personoverview.jsp", request, response);
@@ -207,7 +210,7 @@ public class Controller extends HttpServlet {
 
 	private void processRegister(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException,
-			SQLException {
+			SQLException, NoSuchAlgorithmException {
 		String firstName = request.getParameter("first");
 		String lastName = request.getParameter("last");
 		String email = request.getParameter("mail");
@@ -283,7 +286,7 @@ public class Controller extends HttpServlet {
 
 	private void processPersonDelete(HttpServletRequest request,
 			HttpServletResponse response) throws SQLException,
-			ServletException, IOException {
+			ServletException, IOException, NoSuchAlgorithmException {
 		personService.deletePerson(request.getParameter("mail"));
 
 		processUserOverview(request, response);
@@ -304,13 +307,15 @@ public class Controller extends HttpServlet {
 
 	private void processPersonUpdate(HttpServletRequest request,
 			HttpServletResponse response) throws SQLException,
-			ServletException, IOException {
+			ServletException, IOException, NoSuchAlgorithmException {
 		String firstName = request.getParameter("first");
 		String lastName = request.getParameter("last");
 		String email = request.getParameter("mail");
 		String password = request.getParameter("passwd");
+		byte[] salt = personService.getPerson(email).getSalt();
+		boolean isHashed = false;
 
-		Person person = new Person(email, password, firstName, lastName);
+		Person person = new Person(email, password, firstName, lastName, salt, isHashed);
 		personService.updatePerson(person);
 
 		processUserOverview(request, response);

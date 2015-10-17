@@ -1,5 +1,7 @@
 package domain.person;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -12,11 +14,11 @@ public class PersonService {
 		personDbRepository = new PersonDbRepository(username, password);
 	}
 	
-	public Person getPerson(String personId) throws SQLException {
+	public Person getPerson(String personId) throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException {
 		return getPersonRepository().get(personId);
 	}
 
-	public List<Person> getPersons() throws SQLException {
+	public List<Person> getPersons() throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException {
 		return getPersonRepository().getAll();
 	}
 

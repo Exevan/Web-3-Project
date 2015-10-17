@@ -1,5 +1,7 @@
 package db;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,13 +20,14 @@ public class PersonDbRepository {
 	private static final String PASSWORD_FIELD = "password";
 	private static final String FIRSTNAME_FIELD = "firstname";
 	private static final String LASTNAME_FIELD = "lastnaam"; // great job Wouter
+	private static final String SALT_FIELD = "salt";
 
 	public PersonDbRepository(String username, String password)
 			throws SQLException {
 		this.connection = WebshopDB.createConnection(username, password);
 	}
 
-	public Person get(String email) throws SQLException {
+	public Person get(String email) throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException {
 		// We could ask for email and pass here. It would be more secure, but
 		// it's not as flexible.
 		// I will think about this
@@ -37,12 +40,14 @@ public class PersonDbRepository {
 			String password = result.getString(PASSWORD_FIELD);
 			String firstname = result.getString(FIRSTNAME_FIELD);
 			String lastname = result.getString(LASTNAME_FIELD);
-			return new Person(email, password, firstname, lastname);
+			String salt = result.getString(SALT_FIELD);
+			boolean isHashed = true;
+			return new Person(email, password, firstname, lastname, salt.getBytes(), isHashed);
 		}
 		return null;
 	}
 
-	public List<Person> getAll() throws SQLException {
+	public List<Person> getAll() throws SQLException, NoSuchAlgorithmException, UnsupportedEncodingException {
 		ResultSet result = connection.createStatement().executeQuery(
 				"SELECT * FROM " + TABLE_NAME);
 		List<Person> list = new ArrayList<>();
@@ -51,7 +56,9 @@ public class PersonDbRepository {
 			String password = result.getString(PASSWORD_FIELD);
 			String firstname = result.getString(FIRSTNAME_FIELD);
 			String lastname = result.getString(LASTNAME_FIELD);
-			list.add(new Person(email, password, firstname, lastname));
+			String salt = result.getString(SALT_FIELD);
+			boolean isHashed = true;
+			list.add(new Person(email, password, firstname, lastname, salt.getBytes(), isHashed));
 		}
 		return list;
 	}
@@ -59,24 +66,26 @@ public class PersonDbRepository {
 	public void add(Person person) throws SQLException {
 		String sql = "INSERT INTO " + TABLE_NAME + " (" + EMAIL_FIELD + ", "
 				+ PASSWORD_FIELD + ", " + FIRSTNAME_FIELD + ", "
-				+ LASTNAME_FIELD + ") VALUES (?, ?, ?, ?)";
+				+ LASTNAME_FIELD + ", " + SALT_FIELD + ") VALUES (?, ?, ?, ?, ?)";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, person.getUserId());
 		statement.setString(2, person.getPassword());
 		statement.setString(3, person.getFirstName());
 		statement.setString(4, person.getLastName());
+		statement.setString(5, new String(person.getSalt()));
 		statement.execute();
 	}
 
 	public void update(Person person) throws SQLException {
 		String sql = "UPDATE " + TABLE_NAME + " SET " + PASSWORD_FIELD
 				+ " = ?, " + FIRSTNAME_FIELD + " = ?, " + LASTNAME_FIELD
-				+ " = ? WHERE " + EMAIL_FIELD + " = ?";
+				+ " = ?, " + SALT_FIELD + " = ? WHERE " + EMAIL_FIELD + " = ?";
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, person.getPassword());
 		statement.setString(2, person.getFirstName());
 		statement.setString(3, person.getLastName());
 		statement.setString(4, person.getUserId());
+		statement.setString(5, new String(person.getSalt()));
 		statement.execute();
 	}
 

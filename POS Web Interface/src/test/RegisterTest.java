@@ -23,7 +23,7 @@ public class RegisterTest {
 	
 	@After
 	public void clean() {
-		//driver.quit();
+		driver.quit();
 	}
 	
 	private String generateRandomEmail(String component) {
@@ -164,7 +164,7 @@ public class RegisterTest {
 		String emailRandom = generateRandomEmail("pieter.pieters@hotmail.com");
 		submitForm("Pieter", "Pieters", emailRandom, "1234");
 		
-		driver=new FirefoxDriver();
+		//driver=new FirefoxDriver();
 		driver.get("http://localhost:8080/POS_Web_Interface/Controller?action=addperson_start");
 
 		submitForm("Pieter", "Pieters", emailRandom, "1234");
