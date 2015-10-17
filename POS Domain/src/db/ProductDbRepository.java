@@ -19,7 +19,8 @@ public class ProductDbRepository {
 	private static final String DESCRIPTION_FIELD = "description";
 	private static final String PRICE_FIELD = "price";
 
-	public ProductDbRepository(String username, String password) throws SQLException {
+	public ProductDbRepository(String username, String password)
+			throws SQLException {
 		this.connection = WebshopDB.createConnection(username, password);
 	}
 
@@ -29,10 +30,12 @@ public class ProductDbRepository {
 		PreparedStatement statement = connection.prepareStatement(sql);
 		statement.setString(1, name);
 		ResultSet result = statement.executeQuery();
-		result.next();
-		String description = result.getString(DESCRIPTION_FIELD);
-		Double price = result.getDouble(PRICE_FIELD);
-		return new Product(name, description, price);
+		if (result.next()) {
+			String description = result.getString(DESCRIPTION_FIELD);
+			Double price = result.getDouble(PRICE_FIELD);
+			return new Product(name, description, price);
+		}
+		return null;
 	}
 
 	public List<Product> getAll() throws SQLException {

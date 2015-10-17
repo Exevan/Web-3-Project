@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -11,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import jdk.nashorn.internal.ir.RuntimeNode.Request;
 import domain.person.Person;
 import domain.person.PersonService;
 import domain.product.Product;
@@ -56,7 +56,7 @@ public class Controller extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		processRequest(request, response);
 	}
-	
+
 	private void processRequest(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		processRequest(request.getParameter("action"), request, response);
@@ -64,13 +64,14 @@ public class Controller extends HttpServlet {
 
 	private void processRequest(String action, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		
+
 		action = (action == null) ? "home" : action;
 
-		if((personService == null || productService == null)) {
+		if ((personService == null || productService == null)) {
 			if (!action.equals("login")) {
-			request.setAttribute("prevaction", action);
-			forward("login.jsp", request, response); return;
+				request.setAttribute("prevaction", action);
+				forward("login.jsp", request, response);
+				return;
 			}
 		}
 
@@ -144,7 +145,8 @@ public class Controller extends HttpServlet {
 		}
 	}
 
-	private void changeStyle(HttpServletRequest request, HttpServletResponse response) {
+	private void changeStyle(HttpServletRequest request,
+			HttpServletResponse response) {
 		String new_style = "";
 		String old_style = getStyle(request);
 		switch (old_style) {
@@ -156,7 +158,7 @@ public class Controller extends HttpServlet {
 			break;
 		}
 		Cookie cookie = new Cookie("style", new_style);
-		cookie.setMaxAge(60 * 60 * 24); //1 day
+		cookie.setMaxAge(60 * 60 * 24); // 1 day
 		response.addCookie(cookie);
 	}
 
@@ -211,10 +213,51 @@ public class Controller extends HttpServlet {
 		String email = request.getParameter("mail");
 		String password = request.getParameter("passwd");
 
-		Person person = new Person(email, password, firstName, lastName);
-		personService.addPerson(person);
+		Person person = new Person();
+		List<String> errormsgs = new ArrayList<>();
 
-		processUserOverview(request, response);
+		try {
+			person.setFirstName(firstName);
+			request.setAttribute("firstName", firstName);
+		} catch (IllegalArgumentException e) {
+			errormsgs.add(e.getMessage());
+			request.setAttribute("firstName", "");
+		}
+		try {
+			person.setLastName(lastName);
+			request.setAttribute("lastName", lastName);
+		} catch (IllegalArgumentException e) {
+			errormsgs.add(e.getMessage());
+			request.setAttribute("lastName", "");
+		}
+		try {
+			person.setUserId(email);
+			request.setAttribute("email", email);
+		} catch (IllegalArgumentException e) {
+			errormsgs.add(e.getMessage());
+			request.setAttribute("email", "");
+		}
+		try {
+			person.setPassword(password);
+			request.setAttribute("password", password);
+		} catch (IllegalArgumentException e) {
+			errormsgs.add(e.getMessage());
+			request.setAttribute("password", "");
+		}
+		if (errormsgs.size() == 0) {
+			if (personService.getPerson(email) != null)
+				errormsgs.add("User already exists");
+			else {
+				try {
+					personService.addPerson(person);
+				} catch (SQLException e) {
+					errormsgs.add(e.getMessage());
+				}
+			}
+		}
+		request.setAttribute("errormsgs", errormsgs);
+		String dest = errormsgs.size() == 0 ? "home" : "addperson_start";
+		processRequest(dest, request, response);
 	}
 
 	private void processAddProduct(HttpServletRequest request,
@@ -227,20 +270,22 @@ public class Controller extends HttpServlet {
 		Product product = new Product(name, desc, price);
 		productService.addProduct(product);
 
-		processProductOverview(request, response);
+		processRequest("home", request, response);
 	}
 
 	private void processProductDelete(HttpServletRequest request,
-			HttpServletResponse response) throws SQLException, ServletException, IOException {
+			HttpServletResponse response) throws SQLException,
+			ServletException, IOException {
 		productService.deleteProduct(request.getParameter("name"));
-		
+
 		processProductOverview(request, response);
 	}
 
 	private void processPersonDelete(HttpServletRequest request,
-			HttpServletResponse response) throws SQLException, ServletException, IOException {
+			HttpServletResponse response) throws SQLException,
+			ServletException, IOException {
 		personService.deletePerson(request.getParameter("mail"));
-		
+
 		processUserOverview(request, response);
 	}
 
@@ -275,7 +320,6 @@ public class Controller extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String style = getStyle(request);
 		request.setAttribute("style", style);
-		request.getRequestDispatcher(destination).forward(request,
-				response);
+		request.getRequestDispatcher(destination).forward(request, response);
 	}
 }
