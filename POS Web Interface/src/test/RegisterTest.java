@@ -18,7 +18,7 @@ public class RegisterTest {
 	@Before
 	public void setUp() {
 		driver=new FirefoxDriver();
-		driver.get("http://localhost:8080/POS_Web_Interface/Controller?action=signUp");
+		driver.get("http://localhost:8080/POS_Web_Interface/register.jsp");
 	}
 	
 	@After
@@ -57,7 +57,7 @@ public class RegisterTest {
 		String title=driver.getTitle();
 		assertEquals("Home",title);
 		
-		driver.get("http://localhost:8080/week01Users/Controller?action=overview");
+		driver.get("http://localhost:8080/week01Users/Controller?action=personoverview");
 		
 		ArrayList<WebElement> listItems=(ArrayList<WebElement>) driver.findElements(By.cssSelector("table tr"));
 		boolean found=false;
@@ -75,10 +75,10 @@ public class RegisterTest {
 		submitForm("", "Janssens", "jan.janssens@hotmail.com", "1234");
 		
 		String title=driver.getTitle();
-		assertEquals("Sign Up",title);
+		assertEquals("Register",title);
 		
 		WebElement errorMsg = driver.findElement(By.cssSelector("div.alert-danger ul li"));
-		assertEquals("No firstname given", errorMsg.getText());
+		assertEquals("No first name given", errorMsg.getText());
 
 		WebElement fieldFirstName=driver.findElement(By.id("firstName"));
 		assertEquals("",fieldFirstName.getAttribute("value"));
@@ -97,7 +97,7 @@ public class RegisterTest {
 		submitForm("Jan", "", "jan.janssens@hotmail.com", "1234");
 		
 		String title=driver.getTitle();
-		assertEquals("Sign Up",title);
+		assertEquals("Register",title);
 		
 		WebElement errorMsg = driver.findElement(By.cssSelector("div.alert-danger ul li"));
 		assertEquals("No last name given", errorMsg.getText());
@@ -119,7 +119,7 @@ public class RegisterTest {
 		submitForm("Jan", "Janssens", "", "1234");
 		
 		String title=driver.getTitle();
-		assertEquals("Sign Up",title);
+		assertEquals("Register",title);
 		
 		WebElement errorMsg = driver.findElement(By.cssSelector("div.alert-danger ul li"));
 		assertEquals("No id given", errorMsg.getText());
@@ -142,7 +142,7 @@ public class RegisterTest {
 		submitForm("Jan", "Janssens", "jan.janssens@hotmail.com", "");
 		
 		String title=driver.getTitle();
-		assertEquals("Sign Up",title);
+		assertEquals("Register",title);
 		
 		WebElement errorMsg = driver.findElement(By.cssSelector("div.alert-danger ul li"));
 		assertEquals("No password given", errorMsg.getText());
@@ -164,7 +164,7 @@ public class RegisterTest {
 		String emailRandom = generateRandomEmail("pieter.pieters@hotmail.com");
 		submitForm("Pieter", "Pieters", emailRandom, "1234");
 		
-		driver.get("http://localhost:8080/week01Users/Controller?action=signUp");
+		driver.get("http://localhost:8080/week01Users/register.jsp");
 
 		submitForm("Pieter", "Pieters", emailRandom, "1234");
 		

@@ -1,0 +1,13 @@
+1	R-click web project > Java EE Tools > Generate Deploymeny Descriptor Stub
+2	Copy these entries inside web.xml:
+
+<env-entry> 
+    <env-entry-name>username</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>R-NUMMER</env-entry-value> 
+</env-entry>
+<env-entry> 
+    <env-entry-name>password</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>PASWOORD</env-entry-value> 
+</env-entry>

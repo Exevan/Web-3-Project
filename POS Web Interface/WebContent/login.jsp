@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Login</title>
 <link rel="stylesheet" type="text/css" href="css/style.css">
-<link rel="stylesheet" type="text/css" href="css/${style}.css">
+<%-- <link rel="stylesheet" type="text/css" href="css/${style}.css"> --%>
 </head>
 <body>
 <div id="container">
@@ -25,7 +25,12 @@
 				<label for="passwd">Password:</label>
 				<input type="password" id="passwd" name="passwd" required>
 			</p>
-			<input type="hidden" name="action" value="login">
+			<p>
+			<label for="remember">Remember me:</label>
+			<input type="checkbox" name="remember" value="false">
+			</p>
+			<input type="hidden" id="remember" name="action" value="login">
+			
 			<input type="hidden" name="prevaction" value="${prevaction}">
 			<input type="submit" value="Login">
 		</form>

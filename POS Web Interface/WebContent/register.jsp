@@ -19,19 +19,19 @@
 		<form method="POST" action="Controller">
 			<p>
 				<label for="first">Firstname:</label>
-				<input type="text" id="first" name="first" required>
+				<input type="text" id="firstName" name="first" required>
 			</p>
 			<p>
 				<label for="last">Lastname:</label>
-				<input type="text" id="last" name="last" required>
+				<input type="text" id="lastName" name="last" required>
 			</p>
 			<p>
 				<label for="mail">E-mail:</label>
-				<input type="text" id="mail" name="mail" required>
+				<input type="text" id="email" name="mail" required>
 			</p>
 			<p>
 				<label for="passwd">Password:</label>
-				<input type="text" id="passwd" name="passwd" required>
+				<input type="text" id="password" name="passwd" required>
 			</p>
 			<input type="hidden" name="action" value="addperson_complete">
 			<input type="submit" value="Register">
