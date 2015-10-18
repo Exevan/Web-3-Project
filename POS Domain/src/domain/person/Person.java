@@ -15,7 +15,7 @@ public class Person {
 	private String userId;
 	private String password;
 	private byte[] salt;
-	
+
 	//Constructor for creating new users, salt is generated.
 	public Person(String userId, String password, String firstName, String lastName) {
 		setUserId(userId);
@@ -23,7 +23,7 @@ public class Person {
 		setFirstName(firstName);
 		setLastName(lastName);
 	}
-	
+
 	//Constructor for creating existing users, salt is given.
 	public Person(String userId, String password, byte[] salt, String firstName, String lastName) {
 		setUserId(userId);
@@ -37,10 +37,14 @@ public class Person {
 		return firstName;
 	}
 
-	public void setFirstName(String firstName) {
+	public static boolean isValidFirstName(String firstName) {
 		if(firstName.isEmpty()){
-			throw new IllegalArgumentException("No firstname given");
+			throw new IllegalArgumentException("No first name given");
 		}
+		return true;
+	}
+
+	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
@@ -48,18 +52,22 @@ public class Person {
 		return lastName;
 	}
 
-	public void setLastName(String lastName) {
+	public static boolean isValidLastName(String lastName) {
 		if(lastName.isEmpty()){
 			throw new IllegalArgumentException("No last name given");
 		}
-		this.lastName = lastName;
+		return true;
+	}
+
+	public void setLastName(String lastName) {
+			this.lastName = lastName;
 	}	
-	
+
 	public String getUserId() {
 		return userId;
 	}
-	
-	public void setUserId(String userId) {
+
+	public static boolean isValidUserId(String userId) {
 		if (userId.isEmpty()) {
 			throw new IllegalArgumentException("No id given");
 		}
@@ -70,24 +78,29 @@ public class Person {
 		if (!m.matches()) {
 			throw new IllegalArgumentException("Email not valid");
 		}
-		this.userId = userId;
+		return true;
+	}
+
+	public void setUserId(String userId) {
+			this.userId = userId;
 	}	
-	
+
 	public String getHashedPassword() {
 		return password;
 	}
 
 	public boolean isCorrectPassword(String password) {
-		if (password.isEmpty()) {
-			throw new IllegalArgumentException("No password given");
-		}
 		return sha1(getHashedPassword(), getSalt()).equals(sha1(password, getSalt()));
 	}
 
-	private void setHashedPassword(String password) {
+	public static boolean isValidPassword(String password) {
 		if(password.isEmpty()){
 			throw new IllegalArgumentException("No password given");
 		}
+		return true;
+	}
+
+	private void setHashedPassword(String password) {
 		this.password = password;
 	}
 
@@ -98,14 +111,14 @@ public class Person {
 	private void setSalt(byte[] salt) {
 		this.salt = salt;
 	}
-	
+
 	public void setPassword(String password)  {
 		SecureRandom random = new SecureRandom();
 		byte seed[] = random.generateSeed(20);
 		setSalt(seed);		
 		setHashedPassword(sha1(password, seed));
 	}
-	
+
 	private static String sha1(String string, byte[] seed) {		
 		try {
 			MessageDigest crypt = MessageDigest.getInstance("SHA-1");

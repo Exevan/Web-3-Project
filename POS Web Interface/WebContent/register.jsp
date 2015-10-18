@@ -15,10 +15,10 @@
 		<jsp:include page="header.jsp">
 			<jsp:param name="title" value="Sign Up" />
 		</jsp:include>
-		<main> <c:if test="${not empty errormsgs}">
+		<main> <c:if test="${not empty errors}">
 			<div class="alert-danger">
 				<ul>
-					<c:forEach items="${errormsgs}" var="error">
+					<c:forEach items="${errors}" var="error">
 						<li>${error}</li>
 					</c:forEach>
 				</ul>
@@ -27,19 +27,19 @@
 		<form method="POST" action="Controller">
 			<p>
 				<label for="first">Firstname:</label>
-				<input type="text" id="firstName" name="first" required>
+				<input type="text" id="firstName" name="first" value="${values[0]}">
 			</p>
 			<p>
 				<label for="last">Lastname:</label>
-				<input type="text" id="lastName" name="last" required>
+				<input type="text" id="lastName" name="last"  value="${values[1]}">
 			</p>
 			<p>
 				<label for="mail">E-mail:</label>
-				<input type="text" id="email" name="mail" required>
+				<input type="text" id="email" name="mail"  value="${values[2]}">
 			</p>
 			<p>
 				<label for="passwd">Password:</label>
-				<input type="text" id="password" name="passwd" required>
+				<input type="text" id="password" name="passwd">
 			</p>
 			<input type="hidden" name="action" value="addperson_complete">
 			<input type="submit" value="Register" id="signUp">

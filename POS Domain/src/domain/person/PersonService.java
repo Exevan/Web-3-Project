@@ -23,8 +23,19 @@ public class PersonService {
 		return getPersonRepository().getAll();
 	}
 
+	public boolean hasPerson(Person person) {
+		return getPerson(person.getUserId()) != null;
+	}
+
+	public boolean canHaveAsPerson(Person person) {
+		if(hasPerson(person))
+			throw new IllegalArgumentException("User already exists");
+		return true;
+	}
+
 	public void addPerson(Person person) {
-		getPersonRepository().add(person);
+		if(canHaveAsPerson(person))
+			getPersonRepository().add(person);
 	}
 
 	public void updatePerson(Person person) {
