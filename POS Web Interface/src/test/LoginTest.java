@@ -8,7 +8,7 @@ import domain.person.Person;
 import domain.person.PersonService;
 
 public class LoginTest {
-	private static PersonService persons = new PersonService("", "");
+	private static PersonService persons = new PersonService();
 
 	private String generateRandomEmail(String component) {
 		// generate random email adres in order to run test more than once

@@ -140,7 +140,8 @@ public class Controller extends HttpServlet {
 		}
 	}
 
-	private void changeStyle(HttpServletRequest request, HttpServletResponse response) {
+	private void changeStyle(HttpServletRequest request,
+			HttpServletResponse response) {
 		String new_style = "";
 		String old_style = getStyle(request);
 		switch (old_style) {
@@ -152,7 +153,7 @@ public class Controller extends HttpServlet {
 			break;
 		}
 		Cookie cookie = new Cookie("style", new_style);
-		cookie.setMaxAge(60 * 60 * 24); //1 day
+		cookie.setMaxAge(60 * 60 * 24); // 1 day
 		response.addCookie(cookie);
 	}
 
@@ -182,8 +183,7 @@ public class Controller extends HttpServlet {
 		//		processRequest(action, request, response);
 	}
 
-	private void processUserOverview(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	private void processUserOverview(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Person> persons = personService.getPersons();
 		request.setAttribute("persons", persons);
 		forward("personoverview.jsp", request, response);
@@ -196,8 +196,7 @@ public class Controller extends HttpServlet {
 		forward("productoverview.jsp", request, response);
 	}
 
-	private void processRegister(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	private void processRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String firstName = request.getParameter("first");
 		String lastName = request.getParameter("last");
 		String email = request.getParameter("mail");
@@ -205,8 +204,8 @@ public class Controller extends HttpServlet {
 
 		Person person = new Person(email, password, firstName, lastName);
 		personService.addPerson(person);
-
-		processUserOverview(request, response);
+		
+		processRequest("home", request, response);
 	}
 
 	private void processAddProduct(HttpServletRequest request,
@@ -218,25 +217,21 @@ public class Controller extends HttpServlet {
 		Product product = new Product(name, desc, price);
 		productService.addProduct(product);
 
-		processProductOverview(request, response);
+		processRequest("home", request, response);
 	}
 
-	private void processProductDelete(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	private void processProductDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		productService.deleteProduct(request.getParameter("name"));
 
 		processProductOverview(request, response);
 	}
 
-	private void processPersonDelete(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	private void processPersonDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		personService.deletePerson(request.getParameter("mail"));
-
 		processUserOverview(request, response);
 	}
 
-	private void processProductUpdate(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	private void processProductUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String name = request.getParameter("name");
 		String desc = request.getParameter("desc");
 		double price = Double.parseDouble(request.getParameter("price"));
@@ -247,14 +242,14 @@ public class Controller extends HttpServlet {
 		processProductOverview(request, response);
 	}
 
-	private void processPersonUpdate(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	private void processPersonUpdate(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String firstName = request.getParameter("first");
 		String lastName = request.getParameter("last");
 		String email = request.getParameter("mail");
 		String password = request.getParameter("passwd");
+		byte[] salt = personService.getPerson(email).getSalt();
 
-		Person person = new Person(email, password, firstName, lastName);
+		Person person = new Person(email, password, salt, firstName, lastName);
 		personService.updatePerson(person);
 
 		processUserOverview(request, response);
@@ -281,7 +276,6 @@ public class Controller extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String style = getStyle(request);
 		request.setAttribute("style", style);
-		request.getRequestDispatcher(destination).forward(request,
-				response);
+		request.getRequestDispatcher(destination).forward(request, response);
 	}
 }

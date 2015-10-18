@@ -29,7 +29,7 @@
 			</p>
 			<p>
 				<label for="passwd">Password:</label>
-				<input type="text" id="passwd" name="passwd" value="${person.password}" required>
+				<input type="text" id="passwd" name="passwd" required>
 			</p>
 			<input type="hidden" name="mail" value="${person.userId}">
 			<input type="hidden" name="action" value="updateperson_complete">

@@ -32,9 +32,6 @@ public class Person {
 		setFirstName(firstName);
 		setLastName(lastName);
 	}
-	
-	public Person() {
-	}
 
 	public String getFirstName() {
 		return firstName;
@@ -63,11 +60,10 @@ public class Person {
 	}
 	
 	public void setUserId(String userId) {
-		if(userId.isEmpty()){
+		if (userId.isEmpty()) {
 			throw new IllegalArgumentException("No id given");
 		}
-		String USERID_PATTERN = 
-				"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+		String USERID_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
 				+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 		Pattern p = Pattern.compile(USERID_PATTERN);
 		Matcher m = p.matcher(userId);
@@ -80,9 +76,9 @@ public class Person {
 	public String getHashedPassword() {
 		return password;
 	}
-	
+
 	public boolean isCorrectPassword(String password) {
-		if(password.isEmpty()){
+		if (password.isEmpty()) {
 			throw new IllegalArgumentException("No password given");
 		}
 		return sha1(getHashedPassword(), getSalt()).equals(sha1(password, getSalt()));
@@ -122,5 +118,4 @@ public class Person {
 		}
 		return null;
 	}
-	
 }

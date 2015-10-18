@@ -57,7 +57,7 @@ public class RegisterTest {
 		String title=driver.getTitle();
 		assertEquals("Home",title);
 		
-		driver.get("http://localhost:8080/week01Users/Controller?action=personoverview");
+		driver.get("http://localhost:8080/POS_Web_Interface/Controller?action=personoverview");
 		
 		ArrayList<WebElement> listItems=(ArrayList<WebElement>) driver.findElements(By.cssSelector("table tr"));
 		boolean found=false;
@@ -164,7 +164,8 @@ public class RegisterTest {
 		String emailRandom = generateRandomEmail("pieter.pieters@hotmail.com");
 		submitForm("Pieter", "Pieters", emailRandom, "1234");
 		
-		driver.get("http://localhost:8080/week01Users/register.jsp");
+		//driver=new FirefoxDriver();
+		driver.get("http://localhost:8080/POS_Web_Interface/Controller?action=addperson_start");
 
 		submitForm("Pieter", "Pieters", emailRandom, "1234");
 		
