@@ -17,10 +17,12 @@ public class ProductDbRepository {
 	private static final String NAME_FIELD = "name";
 	private static final String DESCRIPTION_FIELD = "description";
 	private static final String PRICE_FIELD = "price";
-	
-	public boolean establishConnection(String username, String password) {		
-			return ((this.connection = WebshopDB.createConnection(username, password)) == null) ? false : true;
-			// hele vieze oneliner
+
+	public boolean establishConnection(String username, String password) {
+		return ((this.connection = WebshopDB.createConnection(username,
+				password)) == null) ? false : true;
+		// hele vieze oneliner
+		// nee, fantastische one-liner
 	}
 
 	public Product get(String name) {
@@ -30,14 +32,15 @@ public class ProductDbRepository {
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, name);
 			ResultSet result = statement.executeQuery();
-			result.next();
-			String description = result.getString(DESCRIPTION_FIELD);
-			Double price = result.getDouble(PRICE_FIELD);
-			return new Product(name, description, price);
+			if (result.next()) {
+				String description = result.getString(DESCRIPTION_FIELD);
+				Double price = result.getDouble(PRICE_FIELD);
+				return new Product(name, description, price);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
 		}
+		return null;
 	}
 
 	public List<Product> getAll() {
@@ -61,7 +64,8 @@ public class ProductDbRepository {
 	public void add(Product product) {
 		try {
 			String sql = "INSERT INTO " + TABLE_NAME + " (" + NAME_FIELD + ", "
-					+ DESCRIPTION_FIELD + ", " + PRICE_FIELD + ") VALUES (?, ?, ?)";
+					+ DESCRIPTION_FIELD + ", " + PRICE_FIELD
+					+ ") VALUES (?, ?, ?)";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, product.getName());
 			statement.setString(2, product.getDescription());
@@ -75,7 +79,8 @@ public class ProductDbRepository {
 	public void update(Product product) {
 		try {
 			String sql = "UPDATE " + TABLE_NAME + " SET " + DESCRIPTION_FIELD
-					+ " = ?, " + PRICE_FIELD + " = ? WHERE " + NAME_FIELD + " = ?";
+					+ " = ?, " + PRICE_FIELD + " = ? WHERE " + NAME_FIELD
+					+ " = ?";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, product.getDescription());
 			statement.setDouble(2, product.getPrice());

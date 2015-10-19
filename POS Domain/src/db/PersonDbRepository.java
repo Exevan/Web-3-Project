@@ -19,32 +19,35 @@ public class PersonDbRepository {
 	private static final String SALT_FIELD = "salt";
 	private static final String FIRSTNAME_FIELD = "firstname";
 	private static final String LASTNAME_FIELD = "lastnaam"; // great job Wouter
-															// suck it Milan
-	
-	public boolean establishConnection(String username, String password) {		
-		return ((this.connection = WebshopDB.createConnection(username, password)) == null) ? false : true;
+																// suck it Milan
+
+	public boolean establishConnection(String username, String password) {
+		return ((this.connection = WebshopDB.createConnection(username,
+				password)) == null) ? false : true;
 		// hele vieze oneliner
 	}
 
 	public Person get(String email) {
-		// We could ask for email and pass here. It would be more secure, but it's not as flexible.
+		// We could ask for email and pass here. It would be more secure, but
+		// it's not as flexible.
 		// I will think about this
 		try {
-			String sql = "SELECT * FROM " + TABLE_NAME + " WHERE " + EMAIL_FIELD
-					+ " = ?";
+			String sql = "SELECT * FROM " + TABLE_NAME + " WHERE "
+					+ EMAIL_FIELD + " = ?";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, email);
 			ResultSet result = statement.executeQuery();
-			result.next();
-			String password = result.getString(PASSWORD_FIELD);
-			byte[] salt = result.getBytes(SALT_FIELD);
-			String firstname = result.getString(FIRSTNAME_FIELD);
-			String lastname = result.getString(LASTNAME_FIELD);
-			return new Person(email, password, salt, firstname, lastname);
+			if (result.next()) {
+				String password = result.getString(PASSWORD_FIELD);
+				byte[] salt = result.getBytes(SALT_FIELD);
+				String firstname = result.getString(FIRSTNAME_FIELD);
+				String lastname = result.getString(LASTNAME_FIELD);
+				return new Person(email, password, salt, firstname, lastname);
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
 		}
+		return null;
 	}
 
 	public List<Person> getAll() {
@@ -69,13 +72,10 @@ public class PersonDbRepository {
 
 	public void add(Person person) {
 		try {
-			String sql = "INSERT INTO " + TABLE_NAME + " (" 
-						+ EMAIL_FIELD + ", "
-						+ PASSWORD_FIELD + ", " 
-						+ SALT_FIELD + ", " 
-						+ FIRSTNAME_FIELD + ", "
-						+ LASTNAME_FIELD + ") "
-						+ "VALUES (?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO " + TABLE_NAME + " (" + EMAIL_FIELD
+					+ ", " + PASSWORD_FIELD + ", " + SALT_FIELD + ", "
+					+ FIRSTNAME_FIELD + ", " + LASTNAME_FIELD + ") "
+					+ "VALUES (?, ?, ?, ?, ?)";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, person.getUserId());
 			statement.setString(2, person.getHashedPassword());
@@ -90,12 +90,10 @@ public class PersonDbRepository {
 
 	public void update(Person person) {
 		try {
-			String sql = "UPDATE " + TABLE_NAME + " SET " 
-					+ PASSWORD_FIELD+ " = ?, "
-					+ SALT_FIELD + " = ?, "  
-					+ FIRSTNAME_FIELD + " = ?, " 
-					+ LASTNAME_FIELD+ " = ? WHERE " 
-					+ EMAIL_FIELD + " = ?";
+			String sql = "UPDATE " + TABLE_NAME + " SET " + PASSWORD_FIELD
+					+ " = ?, " + SALT_FIELD + " = ?, " + FIRSTNAME_FIELD
+					+ " = ?, " + LASTNAME_FIELD + " = ? WHERE " + EMAIL_FIELD
+					+ " = ?";
 			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, person.getHashedPassword());
 			statement.setString(2, person.getSalt().toString());
