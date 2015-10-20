@@ -27,7 +27,7 @@ public class RegisterTest {
 	}
 	
 	private String generateRandomEmail(String component) {
-		// generate random email adres in order to run test more than once
+		// generate random email address in order to run test more than once
 		int random = (int)(Math. random() * 1000 + 1);
 		return random+component;
 	}
