@@ -1,15 +1,20 @@
-package domain.person;
+package db;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PersonRepository {
+import domain.person.Person;
+import domain.person.Role;
+
+public class PersonLocalRepository implements PersonDbRepository{
 	private Map<String, Person> persons;
 
-	public PersonRepository () {
+	public PersonLocalRepository () {
 		persons = new HashMap<String, Person>();
+		add(new Person("admin@ucll.be", "t", "Ad", "Min", Role.ADMINISTRATOR));
+		add(new Person("cashier@ucll.be", "t", "Cash", "Ier", Role.CASHIER));
 	}
 
 	public Person get(String personId){
@@ -40,10 +45,15 @@ public class PersonRepository {
 		persons.put(person.getUserId(), person);
 	}
 
-	public void delete(String personId){
-		if(personId == null){
+	public void delete(String userId){
+		if(userId == null){
 			throw new IllegalArgumentException("No id given");
 		}
-		persons.remove(personId);
+		persons.remove(userId);
+	}
+
+	@Override
+	public boolean establishConnection(String username, String password) {
+		return true;
 	}
 }

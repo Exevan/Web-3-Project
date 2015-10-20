@@ -2,13 +2,14 @@ package domain.product;
 
 import java.util.List;
 
-import db.ProductDbRepository;
+import db.ProductLocalRepository;
+import db.productDbRepository;
 
 public class ProductService {
-	private ProductDbRepository productRepository;
+	private productDbRepository productRepository;
 
 	public ProductService() {
-		productRepository = new ProductDbRepository();
+		productRepository = new ProductLocalRepository();
 	}
 	
 	public boolean establishConnection(String username, String password) {
@@ -35,7 +36,7 @@ public class ProductService {
 		getProductRepository().delete(productName);
 	}
 
-	private ProductDbRepository getProductRepository() {
+	private productDbRepository getProductRepository() {
 		return productRepository;
 	}
 }

@@ -3,12 +3,14 @@ package domain.person;
 import java.util.List;
 
 import db.PersonDbRepository;
+import db.PersonLocalRepository;
+import db.PersonSQLRepository;
 
 public class PersonService {
 	private PersonDbRepository personDbRepository;
 
 	public PersonService() {
-		personDbRepository = new PersonDbRepository();
+		personDbRepository = new PersonLocalRepository();
 	}
 
 	public boolean establishConnection(String username, String password) {

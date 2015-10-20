@@ -15,22 +15,25 @@ public class Person {
 	private String userId;
 	private String password;
 	private byte[] salt;
+	private Role role;
 
 	//Constructor for creating new users, salt is generated.
-	public Person(String userId, String password, String firstName, String lastName) {
+	public Person(String userId, String password, String firstName, String lastName, Role role) {
 		setUserId(userId);
 		setPassword(password);
 		setFirstName(firstName);
 		setLastName(lastName);
+		setRole(role);
 	}
 
 	//Constructor for creating existing users, salt is given.
-	public Person(String userId, String password, byte[] salt, String firstName, String lastName) {
+	public Person(String userId, String password, byte[] salt, String firstName, String lastName, Role role) {
 		setUserId(userId);
 		setHashedPassword(password);
 		setSalt(salt);
 		setFirstName(firstName);
 		setLastName(lastName);
+		setRole(role);
 	}
 
 	public String getFirstName() {
@@ -66,6 +69,14 @@ public class Person {
 	public String getUserId() {
 		return userId;
 	}
+	
+	public Role getRole() {
+		return role;
+	}
+	
+	private void setRole(Role role) {
+		this.role = role;
+	}
 
 	public static boolean isValidUserId(String userId) {
 		if (userId.isEmpty()) {
@@ -90,7 +101,7 @@ public class Person {
 	}
 
 	public boolean isCorrectPassword(String password) {
-		return sha1(getHashedPassword(), getSalt()).equals(sha1(password, getSalt()));
+		return getHashedPassword().equals(sha1(password, getSalt()));
 	}
 
 	public static boolean isValidPassword(String password) {

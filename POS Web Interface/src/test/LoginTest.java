@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import domain.person.Person;
 import domain.person.PersonService;
+import domain.person.Role;
 
 public class LoginTest {
 	private static PersonService persons = new PersonService();
@@ -20,7 +21,7 @@ public class LoginTest {
 	public void personRetrievedFromDatabase() {
 		// test if user can be retrieved from database
 		String email = generateRandomEmail("klaas@klaas.be");
-		Person klaas = new Person(email, "1234", "Klaas", "Claesens");
+		Person klaas = new Person(email, "1234", "Klaas", "Claesens", Role.CUSTOMER);
 		persons.addPerson(klaas);
 
 		Person klaasRetrieved = persons.getPerson(email);
@@ -32,7 +33,7 @@ public class LoginTest {
 	public void personCorrectRetrievedFromDatabase() {
 		// test if all properties of user can be retrieved correctly from database
 		String email = generateRandomEmail("klaas@klaas.be");
-		Person klaas = new Person(email, "1234", "Klaas", "Claesens");
+		Person klaas = new Person(email, "1234", "Klaas", "Claesens", Role.CUSTOMER);
 		persons.addPerson(klaas);
 
 		Person klaasRetrieved = persons.getPerson(email);

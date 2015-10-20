@@ -9,7 +9,7 @@ import java.util.List;
 
 import domain.product.Product;
 
-public class ProductDbRepository {
+public class ProductSQLRepository {
 
 	private Connection connection;
 
