@@ -1,4 +1,4 @@
-package db;
+package db.product;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import java.util.Map;
 
 import domain.product.Product;
 
-public class ProductLocalRepository implements productDbRepository {
+public class ProductLocalRepository implements ProductDbRepository {
 
 	private Map<String, Product> products;
 
@@ -48,11 +48,6 @@ public class ProductLocalRepository implements productDbRepository {
 			throw new IllegalArgumentException("No name given");
 		}
 		products.remove(productName);
-	}
-
-	@Override
-	public boolean establishConnection(String username, String password) {
-		return true;
 	}
 
 }

@@ -1,11 +1,10 @@
-package db;
+package db.person;
 
 import java.util.List;
 
 import domain.person.Person;
 
 public interface PersonDbRepository {
-	boolean establishConnection(String username, String password);
 	Person get(String userId);
 	List<Person> getAll();
 	void add(Person person);

@@ -20,7 +20,7 @@
 				<th>E-mail</th>
 				<th>First Name</th>
 				<th>Last Name</th>
-				<th>Hashed Password</th>
+				<th>Role</th>
 				<th></th>
 				<th></th>
 			</tr>
@@ -30,7 +30,6 @@
 					<td><c:out value="${person.firstName}" /></td>
 					<td><c:out value="${person.lastName}" /></td>
 					<td><c:out value="${person.role}" /></td>
-					<%-- <td><c:out value="${person.hashedPassword}" /></td> --%>
 					<td><form method="post" action="Controller">
 							<input type="hidden" name="action" value="deleteperson_start">
 							<input type="hidden" name="mail" value="${person.userId}">

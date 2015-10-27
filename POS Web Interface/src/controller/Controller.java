@@ -1,13 +1,12 @@
 package controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -16,12 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import db.WebshopFacade;
 import domain.NotAuthorizedException;
 import domain.person.Person;
-import domain.person.PersonService;
 import domain.person.Role;
 import domain.product.Product;
-import domain.product.ProductService;
 
 /**
  * Servlet implementation class Controller
@@ -29,20 +27,30 @@ import domain.product.ProductService;
 @WebServlet("/Controller")
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private PersonService personService;
-	private ProductService productService;
+	private WebshopFacade webshopFacade;
 
 	/**
-	 * @throws SQLException
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public Controller() throws SQLException {
+	public Controller() {
 		super();
+	}
 
-		personService = new PersonService();
-		productService = new ProductService();
+	@Override
+	public void init() throws ServletException {
+		super.init();
 
-		establishDbConnection();
+		ServletContext context = getServletContext();
+
+		Properties properties = new Properties();
+		Enumeration<String> paramNames = context.getInitParameterNames();
+		while (paramNames.hasMoreElements()) {
+			String paramName = paramNames.nextElement();
+			properties.setProperty(paramName,
+					context.getInitParameter(paramName));
+		}
+
+		webshopFacade = new WebshopFacade(properties);
 	}
 
 	protected void doGet(HttpServletRequest request,
@@ -86,7 +94,7 @@ public class Controller extends HttpServlet {
 				break;
 			case "deleteperson_start":
 				request.setAttribute("person",
-						personService.getPerson(request.getParameter("mail")));
+						webshopFacade.getPerson(request.getParameter("mail")));
 				forward("deleteperson.jsp", request, response);
 				break;
 			case "deleteperson_complete":
@@ -94,7 +102,7 @@ public class Controller extends HttpServlet {
 				break;
 			case "updateperson_start":
 				request.setAttribute("person",
-						personService.getPerson(request.getParameter("mail")));
+						webshopFacade.getPerson(request.getParameter("mail")));
 				forward("updateperson.jsp", request, response);
 				break;
 			case "updateperson_complete":
@@ -108,7 +116,7 @@ public class Controller extends HttpServlet {
 				break;
 			case "deleteproduct_start":
 				request.setAttribute("product",
-						productService.getProduct(request.getParameter("name")));
+						webshopFacade.getProduct(request.getParameter("name")));
 				forward("deleteproduct.jsp", request, response);
 				break;
 			case "deleteproduct_complete":
@@ -116,7 +124,7 @@ public class Controller extends HttpServlet {
 				break;
 			case "updateproduct_start":
 				request.setAttribute("product",
-						productService.getProduct(request.getParameter("name")));
+						webshopFacade.getProduct(request.getParameter("name")));
 				forward("updateproduct.jsp", request, response);
 				break;
 			case "updateproduct_complete":
@@ -148,12 +156,9 @@ public class Controller extends HttpServlet {
 					"You aren't authorized to view this page");
 	}
 
-	private boolean isFromUserWithRole(HttpServletRequest request,
-			Role role) {
+	private boolean isFromUserWithRole(HttpServletRequest request, Role role) {
 		Person user = getUser(request);
-		boolean out = (user == null) ? false : user.getRole().equals(role);
-		System.out.println("is user with role? " + out);
-		return out;
+		return (user == null) ? false : user.getRole().equals(role);
 	}
 
 	private void changeStyle(HttpServletRequest request,
@@ -189,7 +194,7 @@ public class Controller extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("passwd");
-		Person user = personService.getPerson(username);
+		Person user = webshopFacade.getPerson(username);
 		if (user.isCorrectPassword(password)) {
 			request.getSession().setAttribute("user", user);
 		}
@@ -198,14 +203,14 @@ public class Controller extends HttpServlet {
 
 	private void processUserOverview(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		List<Person> persons = personService.getPersons();
+		List<Person> persons = webshopFacade.getPersons();
 		request.setAttribute("persons", persons);
 		forward("personoverview.jsp", request, response);
 	}
 
 	private void processProductOverview(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		List<Product> products = productService.getProducts();
+		List<Product> products = webshopFacade.getProducts();
 		request.setAttribute("products", products);
 		forward("productoverview.jsp", request, response);
 	}
@@ -254,7 +259,7 @@ public class Controller extends HttpServlet {
 		}
 
 		try {
-			personService.addPerson(new Person(email, password, firstName,
+			webshopFacade.addPerson(new Person(email, password, firstName,
 					lastName, Role.CUSTOMER));
 		} catch (IllegalArgumentException e) {
 			errors.add(e.getMessage());
@@ -278,21 +283,21 @@ public class Controller extends HttpServlet {
 		double price = Double.parseDouble(request.getParameter("price"));
 
 		Product product = new Product(name, desc, price);
-		productService.addProduct(product);
+		webshopFacade.addProduct(product);
 
 		processRequest("home", request, response);
 	}
 
 	private void processProductDelete(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		productService.deleteProduct(request.getParameter("name"));
+		webshopFacade.deleteProduct(request.getParameter("name"));
 
 		processProductOverview(request, response);
 	}
 
 	private void processPersonDelete(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		personService.deletePerson(request.getParameter("mail"));
+		webshopFacade.deletePerson(request.getParameter("mail"));
 		processUserOverview(request, response);
 	}
 
@@ -303,7 +308,7 @@ public class Controller extends HttpServlet {
 		double price = Double.parseDouble(request.getParameter("price"));
 
 		Product product = new Product(name, desc, price);
-		productService.updateProduct(product);
+		webshopFacade.updateProduct(product);
 
 		processProductOverview(request, response);
 	}
@@ -314,34 +319,34 @@ public class Controller extends HttpServlet {
 		String lastName = request.getParameter("last");
 		String email = request.getParameter("mail");
 		String password = request.getParameter("passwd");
-		byte[] salt = personService.getPerson(email).getSalt();
+		byte[] salt = webshopFacade.getPerson(email).getSalt();
 
 		Person person = new Person(email, password, salt, firstName, lastName,
 				Role.CUSTOMER);
-		personService.updatePerson(person);
+		webshopFacade.updatePerson(person);
 
 		processUserOverview(request, response);
 	}
 
-	private boolean establishDbConnection() {
-		try {
-			Context env = (Context) new InitialContext()
-					.lookup("java:comp/env");
-
-			String username = (String) env.lookup("username");
-			String password = (String) env.lookup("password");
-
-			boolean person = personService.establishConnection(username,
-					password);
-			boolean product = productService.establishConnection(username,
-					password);
-
-			return person && product;
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
+	// private boolean establishDbConnection() {
+	// try {
+	// Context env = (Context) new InitialContext()
+	// .lookup("java:comp/env");
+	//
+	// String username = (String) env.lookup("username");
+	// String password = (String) env.lookup("password");
+	//
+	// boolean person = webshopFacade.establishConnection(username,
+	// password);
+	// boolean product = webshopFacade.establishConnection(username,
+	// password);
+	//
+	// return person && product;
+	// } catch (NamingException e) {
+	// e.printStackTrace();
+	// }
+	// return false;
+	// }
 
 	private Person getUser(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
