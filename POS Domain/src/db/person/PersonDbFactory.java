@@ -21,6 +21,7 @@ public class PersonDbFactory {
 			break;
 		case LOCALDB:
 			db = new PersonLocalRepository();
+			break;
 		}
 		return db;
 	}

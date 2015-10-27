@@ -18,12 +18,23 @@ public class RegisterTest {
 	@Before
 	public void setUp() {
 		driver=new FirefoxDriver();
+		login();
 		driver.get("http://localhost:8080/POS_Web_Interface/register.jsp");
 	}
 	
 	@After
 	public void clean() {
 		driver.quit();
+	}
+	
+	private void login() {
+		driver.get("http://localhost:8080/POS_Web_Interface/login.jsp");
+		
+		fillOutField("username", "admin@ucll.be");
+		fillOutField("passwd", "t");
+		
+		WebElement button=driver.findElement(By.id("login"));
+		button.click();
 	}
 	
 	private String generateRandomEmail(String component) {
@@ -45,7 +56,7 @@ public class RegisterTest {
 		fillOutField("password", password);
 		
 		WebElement button=driver.findElement(By.id("signUp"));
-		button.click();		
+		button.click();
 	}
 	
 
@@ -63,7 +74,7 @@ public class RegisterTest {
 		boolean found=false;
 		for (WebElement tableRow:tableRows) {
 			String email = tableRow.getText();
-			if (email.equals(randomEmail+" Jan Janssens")) {
+			if (email.equals(randomEmail+" Jan Janssens CUSTOMER")) {
 				found=true;
 			}
 		}

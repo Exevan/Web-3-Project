@@ -22,6 +22,7 @@ public class ProductDbFactory {
 			break;
 		case LOCALDB:
 			db = new ProductLocalRepository();
+			break;
 		}
 		return db;
 	}

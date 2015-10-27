@@ -197,6 +197,9 @@ public class Controller extends HttpServlet {
 		Person user = webshopFacade.getPerson(username);
 		if (user.isCorrectPassword(password)) {
 			request.getSession().setAttribute("user", user);
+		} else {
+			// TODO say that password was incorrect
+			System.out.println("incorrect password");
 		}
 		processRequest("home", request, response);
 	}
@@ -259,8 +262,9 @@ public class Controller extends HttpServlet {
 		}
 
 		try {
-			webshopFacade.addPerson(new Person(email, password, firstName,
-					lastName, Role.CUSTOMER));
+			if (errors.size() == 0)
+				webshopFacade.addPerson(new Person(email, password, firstName,
+						lastName, Role.CUSTOMER));
 		} catch (IllegalArgumentException e) {
 			errors.add(e.getMessage());
 		}

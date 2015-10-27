@@ -32,7 +32,7 @@
 			<input type="hidden" id="remember" name="action" value="login">
 			
 			<input type="hidden" name="prevaction" value="${prevaction}">
-			<input type="submit" value="Login">
+			<input type="submit" value="Login" id="login">
 		</form>
 		</main>
 		<jsp:include page="footer.jsp">

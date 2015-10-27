@@ -21,8 +21,8 @@ public class PersonSQLRepository extends SQLrepository implements PersonDbReposi
 	private static final String PASSWORD_FIELD = "password";
 	private static final String SALT_FIELD = "salt";
 	private static final String FIRSTNAME_FIELD = "firstname";
-	private static final String LASTNAME_FIELD = "lastnaam"; // great job Wouter
-																// suck it Milan
+	private static final String LASTNAME_FIELD = "lastname";
+
 	private static final String ROLE_FIELD = "role";
 
 	public PersonSQLRepository(Properties properties) {
@@ -104,7 +104,7 @@ public class PersonSQLRepository extends SQLrepository implements PersonDbReposi
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, person.getUserId());
 			statement.setString(2, person.getHashedPassword());
-			statement.setString(3, person.getSalt().toString());
+			statement.setBytes(3, person.getSalt());
 			statement.setString(4, person.getFirstName());
 			statement.setString(5, person.getLastName());
 			statement.setString(6, person.getRole().toString());
@@ -131,7 +131,7 @@ public class PersonSQLRepository extends SQLrepository implements PersonDbReposi
 		try {
 			statement = connection.prepareStatement(sql);
 			statement.setString(1, person.getHashedPassword());
-			statement.setString(2, person.getSalt().toString());
+			statement.setBytes(2, person.getSalt());
 			statement.setString(3, person.getFirstName());
 			statement.setString(4, person.getLastName());
 			statement.setString(5, person.getRole().toString());
