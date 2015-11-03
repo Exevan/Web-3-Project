@@ -34,10 +34,11 @@
 			aspernatur aut odit aut fugit, sed quia consequuntur magni dolores
 			eos qui ratione voluptatem sequi nesciunt.</p>
 		<c:if test="${empty username}">
-			<a href="login.jsp">login</a>
+			<a href="Controller?action=login_start">login</a>
 		</c:if>
 		<c:if test="${not empty username}">
 			<p>Welcome ${username}!</p>
+			<a href="Controller?action=logout">logout</a>
 		</c:if>
 		</main>
 		<jsp:include page="footer.jsp">

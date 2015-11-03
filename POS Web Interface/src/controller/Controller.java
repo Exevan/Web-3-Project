@@ -76,9 +76,15 @@ public class Controller extends HttpServlet {
 		try {
 
 			switch (action) {
-
+			
+			case "login_start":
+				forward("login.jsp", request, response);
+				break;
 			case "login":
 				processLogin(request, response);
+				break;
+			case "logout":
+				processLogout(request, response);
 				break;
 			case "personoverview":
 				processUserOverview(request, response);
@@ -192,15 +198,34 @@ public class Controller extends HttpServlet {
 
 	private void processLogin(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		List<String> errors = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
+		values.add("");
+
 		String username = request.getParameter("username");
 		String password = request.getParameter("passwd");
 		Person user = webshopFacade.getPerson(username);
-		if (user.isCorrectPassword(password)) {
+		
+		if (user == null) {
+			errors.add("A user with this email does not exist");
+		} else if (user.isCorrectPassword(password)) {
 			request.getSession().setAttribute("user", user);
 		} else {
-			// TODO say that password was incorrect
-			System.out.println("incorrect password");
+			values.set(0, username);
+			errors.add("The password is incorrect");
 		}
+		
+		if (errors.size() > 0) {
+			request.setAttribute("errors", errors);
+			request.setAttribute("values", values);
+			processRequest("login_start", request, response);
+		} else
+			processRequest("home", request, response);
+	}
+
+	private void processLogout(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		request.getSession().removeAttribute("user");
 		processRequest("home", request, response);
 	}
 
@@ -282,14 +307,59 @@ public class Controller extends HttpServlet {
 
 	private void processAddProduct(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		String name = request.getParameter("name");
-		String desc = request.getParameter("desc");
-		double price = Double.parseDouble(request.getParameter("price"));
+		List<String> errors = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
+		values.add("");
+		values.add("");
+		values.add("");
 
-		Product product = new Product(name, desc, price);
-		webshopFacade.addProduct(product);
+		String name = "";
+		try {
+			name = request.getParameter("name");
+			Product.isValidName(name);
+			values.set(0, name);
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
 
-		processRequest("home", request, response);
+		String desc = "";
+		try {
+			desc = request.getParameter("desc");
+			Product.isValidDescription(desc);
+			values.set(1, desc);
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
+
+		double price = 0;
+		try {
+			String raw_price = request.getParameter("price");
+			price = Double.parseDouble(raw_price);
+			Product.isValidPrice(price);
+			values.set(2, Double.toString(price));
+		} catch (NumberFormatException e1) {
+			errors.add(e1.getMessage());
+
+		} catch (IllegalArgumentException e2) {
+			errors.add(e2.getMessage());
+		}
+
+		try {
+			if (errors.size() == 0)
+				webshopFacade.addProduct(new Product(name, desc, price));
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
+
+		String action = "home";
+
+		if (!errors.isEmpty()) {
+			request.setAttribute("errors", errors);
+			action = "addproduct_start";
+		}
+
+		request.setAttribute("values", values);
+		processRequest(action, request, response);
 	}
 
 	private void processProductDelete(HttpServletRequest request,
@@ -307,50 +377,111 @@ public class Controller extends HttpServlet {
 
 	private void processProductUpdate(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		String name = request.getParameter("name");
-		String desc = request.getParameter("desc");
-		double price = Double.parseDouble(request.getParameter("price"));
+		List<String> errors = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
+		values.add("");
+		values.add("");
 
-		Product product = new Product(name, desc, price);
-		webshopFacade.updateProduct(product);
+		String name = request.getParameter("name"); // this should be okay
+													// because server supplied
+													// this
 
-		processProductOverview(request, response);
+		String desc = "";
+		try {
+			desc = request.getParameter("desc");
+			Product.isValidDescription(desc);
+			values.set(0, desc);
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
+
+		double price = 0;
+		try {
+			String raw_price = request.getParameter("price");
+			price = Double.parseDouble(raw_price);
+			Product.isValidPrice(price);
+			values.set(1, Double.toString(price));
+		} catch (NumberFormatException e1) {
+			errors.add(e1.getMessage());
+
+		} catch (IllegalArgumentException e2) {
+			errors.add(e2.getMessage());
+		}
+
+		try {
+			if (errors.size() == 0)
+				webshopFacade.updateProduct(new Product(name, desc, price));
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
+
+		String action = "home";
+
+		if (!errors.isEmpty()) {
+			request.setAttribute("errors", errors);
+			action = "updateproduct_start";
+		}
+
+		request.setAttribute("values", values);
+		processRequest(action, request, response);
 	}
 
 	private void processPersonUpdate(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		List<String> errors = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
+		values.add("");
+		values.add("");
+
 		String firstName = request.getParameter("first");
-		String lastName = request.getParameter("last");
-		String email = request.getParameter("mail");
-		String password = request.getParameter("passwd");
-		byte[] salt = webshopFacade.getPerson(email).getSalt();
 
-		Person person = new Person(email, password, salt, firstName, lastName,
-				Role.CUSTOMER);
-		webshopFacade.updatePerson(person);
+		String lastName = "";
+		try {
+			lastName = request.getParameter("last");
+			Person.isValidLastName(lastName);
+			values.set(0, lastName);
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
 
-		processUserOverview(request, response);
+		String email = "";
+		try {
+			email = request.getParameter("mail");
+			Person.isValidUserId(email);
+			values.set(1, email);
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
+
+		String password = "";
+		try {
+			password = request.getParameter("passwd");
+			Person.isValidPassword(password);
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
+
+		Role userRole = webshopFacade.getRole(email);
+		userRole = userRole == null ? Role.CUSTOMER : userRole;
+
+		try {
+			if (errors.size() == 0)
+				webshopFacade.updatePerson(new Person(email, password,
+						firstName, lastName, userRole));
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
+
+		String action = "home";
+
+		if (!errors.isEmpty()) {
+			request.setAttribute("errors", errors);
+			action = "updateperson_start";
+		}
+
+		request.setAttribute("values", values);
+		processRequest(action, request, response);
 	}
-
-	// private boolean establishDbConnection() {
-	// try {
-	// Context env = (Context) new InitialContext()
-	// .lookup("java:comp/env");
-	//
-	// String username = (String) env.lookup("username");
-	// String password = (String) env.lookup("password");
-	//
-	// boolean person = webshopFacade.establishConnection(username,
-	// password);
-	// boolean product = webshopFacade.establishConnection(username,
-	// password);
-	//
-	// return person && product;
-	// } catch (NamingException e) {
-	// e.printStackTrace();
-	// }
-	// return false;
-	// }
 
 	private Person getUser(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);

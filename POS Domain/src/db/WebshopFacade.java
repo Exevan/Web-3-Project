@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import domain.person.Person;
 import domain.person.PersonService;
+import domain.person.Role;
 import domain.product.Product;
 import domain.product.ProductService;
 
@@ -72,6 +73,11 @@ public class WebshopFacade {
 
 	public Person getAuthenticatedUser(String personId, String password) {		
 		return personService.getAuthenticatedUser(personId, password);
+	}
+	
+	public Role getRole(String userId) {
+		Person person = personService.getPerson(userId);
+		return person == null ? null : person.getRole();
 	}
 	
 }

@@ -15,11 +15,19 @@
 		<jsp:include page="header.jsp">
 			<jsp:param name="title" value="Login"/>
 		</jsp:include>
-		<main>
+		<main> <c:if test="${not empty errors}">
+			<div class="alert-danger">
+				<ul>
+					<c:forEach items="${errors}" var="error">
+						<li>${error}</li>
+					</c:forEach>
+				</ul>
+			</div>
+		</c:if>
 		<form method="POST" action="Controller">
 			<p>
 				<label for="username">Username:</label>
-				<input type="text" id="username" name="username" required>
+				<input type="text" id="username" name="username" value="${values[0]}">
 			</p>
 			<p>
 				<label for="passwd">Password:</label>
