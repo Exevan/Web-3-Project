@@ -38,7 +38,7 @@
 		</c:if>
 		<c:if test="${not empty username}">
 			<p>Welcome ${username}!</p>
-			<a href="Controller?action=logout">logout</a>
+			<p><a href="Controller?action=logout">logout</a></p>
 		</c:if>
 		</main>
 		<jsp:include page="footer.jsp">
