@@ -81,9 +81,11 @@ public class Controller extends HttpServlet {
 				forward("login.jsp", request, response);
 				break;
 			case "login":
+				//DONE
 				processLogin(request, response);
 				break;
 			case "logout":
+				//DONE
 				processLogout(request, response);
 				break;
 			case "personoverview":
@@ -365,7 +367,6 @@ public class Controller extends HttpServlet {
 	private void processProductDelete(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		webshopFacade.deleteProduct(request.getParameter("name"));
-
 		processProductOverview(request, response);
 	}
 
