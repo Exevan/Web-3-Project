@@ -1,20 +1,18 @@
 package domain.person;
 
 import java.util.List;
+import java.util.Properties;
 
-import db.PersonDbRepository;
-import db.PersonLocalRepository;
-import db.PersonSQLRepository;
+import db.DBtypes;
+import db.person.PersonDbFactory;
+import db.person.PersonDbRepository;
 
 public class PersonService {
 	private PersonDbRepository personDbRepository;
 
-	public PersonService() {
-		personDbRepository = new PersonLocalRepository();
-	}
-
-	public boolean establishConnection(String username, String password) {
-		return personDbRepository.establishConnection(username, password);
+	public PersonService(DBtypes type, Properties properties) {
+		PersonDbFactory factory = PersonDbFactory.getPersonDbFactory();
+		personDbRepository = factory.createPersonDb(type, properties);
 	}
 
 	public Person getPerson(String personId) {

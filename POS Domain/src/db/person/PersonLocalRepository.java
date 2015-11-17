@@ -1,4 +1,4 @@
-package db;
+package db.person;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,10 +50,5 @@ public class PersonLocalRepository implements PersonDbRepository{
 			throw new IllegalArgumentException("No id given");
 		}
 		persons.remove(userId);
-	}
-
-	@Override
-	public boolean establishConnection(String username, String password) {
-		return true;
 	}
 }

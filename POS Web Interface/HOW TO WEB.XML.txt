@@ -1,13 +1,31 @@
-1	R-click web project > Java EE Tools > Generate Deploymeny Descriptor Stub
-2	Copy these entries inside web.xml:
+1	R-click web project > Java EE Tools > Generate Deployment Descriptor Stub
+2	Use the following pattern to set all the properties:
 
-<env-entry> 
-    <env-entry-name>username</env-entry-name>
-    <env-entry-type>java.lang.String</env-entry-type>
-    <env-entry-value>R-NUMMER</env-entry-value> 
-</env-entry>
-<env-entry> 
-    <env-entry-name>password</env-entry-name>
-    <env-entry-type>java.lang.String</env-entry-type>
-    <env-entry-value>PASWOORD</env-entry-value> 
-</env-entry>
+<context-param>
+	<param-name>[key]</param-name>
+	<param-value>[value]</param-value>
+</context-param>
+
+The properties ([key] - [value]) that are needed are:
+url - jdbc:postgresql://gegevensbanken.khleuven.be:51516/2TX32
+username - [USERNAME]
+password - [PASSWORD]
+ssl - true
+sslfactory - org.postgresql.ssl.NonValidatingFactory
+driver - org.postgresql.Driver
+
+Also add following elements:
+
+<welcome-file-list>
+	<welcome-file>Controller</welcome-file> //welcome-file-list should exist so alter it
+</welcome-file-list>
+<jsp-config>
+	<jsp-property-group>
+		<url-pattern>*.jsp</url-pattern>
+		<scripting-invalid>true</scripting-invalid>
+	</jsp-property-group>
+</jsp-config>
+<error-page>
+	<exception-type>java.lang.Throwable</exception-type>
+	<location>/error.jsp</location>
+</error-page>

@@ -15,19 +15,27 @@
 		<jsp:include page="header.jsp">
 			<jsp:param name="title" value="Add product" />
 		</jsp:include>
-		<main>
+		<main> <c:if test="${not empty errors}">
+			<div class="alert-danger">
+				<ul>
+					<c:forEach items="${errors}" var="error">
+						<li>${error}</li>
+					</c:forEach>
+				</ul>
+			</div>
+		</c:if>
 		<form method="POST" action="Controller">
 			<p>
 				<label for="name">Product name:</label> <input type="text" id="name"
-					name="name" required>
+					name="name" value="${values[0]}">
 			</p>
 			<p>
 				<label for="desc">Description:</label> <input type="text" id="desc"
-					name="desc" required>
+					name="desc" value="${values[1]}">
 			</p>
 			<p>
 				<label for="price">Price:</label> <input type="text" id="price"
-					name="price" required>
+					name="price" value="${values[2]}">
 			</p>
 			<input type="hidden" name="action" value="addproduct_complete">
 			<input type="submit" value="Add">

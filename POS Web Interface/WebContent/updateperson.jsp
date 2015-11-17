@@ -14,22 +14,30 @@
 		<jsp:include page="header.jsp">
 			<jsp:param name="title" value="Users" />
 		</jsp:include>
-		<main>
+		<main> <c:if test="${not empty errors}">
+			<div class="alert-danger">
+				<ul>
+					<c:forEach items="${errors}" var="error">
+						<li>${error}</li>
+					</c:forEach>
+				</ul>
+			</div>
+		</c:if>
 			<form method="POST" action="Controller">
 			<p>
 				Email: ${person.userId}
 			</p>
 			<p>
 				<label for="first">Firstname:</label>
-				<input type="text" id="first" name="first" value="${person.firstName}" required>
+				<input type="text" id="first" name="first" value="${person.firstName}" value="${values[0]}">
 			</p>
 			<p>
 				<label for="last">Lastname:</label>
-				<input type="text" id="last" name="last" value="${person.lastName}" required>
+				<input type="text" id="last" name="last" value="${person.lastName}" value="${values[1]}">
 			</p>
 			<p>
 				<label for="passwd">Password:</label>
-				<input type="text" id="passwd" name="passwd" required>
+				<input type="text" id="passwd" name="passwd">
 			</p>
 			<input type="hidden" name="mail" value="${person.userId}">
 			<input type="hidden" name="action" value="updateperson_complete">

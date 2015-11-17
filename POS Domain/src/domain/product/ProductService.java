@@ -1,19 +1,18 @@
 package domain.product;
 
 import java.util.List;
+import java.util.Properties;
 
-import db.ProductLocalRepository;
-import db.productDbRepository;
+import db.DBtypes;
+import db.product.ProductDbFactory;
+import db.product.ProductDbRepository;
 
 public class ProductService {
-	private productDbRepository productRepository;
+	private ProductDbRepository productRepository;
 
-	public ProductService() {
-		productRepository = new ProductLocalRepository();
-	}
-	
-	public boolean establishConnection(String username, String password) {
-		return productRepository.establishConnection(username, password);
+	public ProductService(DBtypes type, Properties properties) {
+		ProductDbFactory factory = ProductDbFactory.getProductDbFactory();
+		productRepository = factory.createProductDb(type, properties);
 	}
 	
 	public Product getProduct(String productName) {
@@ -36,7 +35,7 @@ public class ProductService {
 		getProductRepository().delete(productName);
 	}
 
-	private productDbRepository getProductRepository() {
+	private ProductDbRepository getProductRepository() {
 		return productRepository;
 	}
 }

@@ -4,12 +4,13 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import db.DBtypes;
 import domain.person.Person;
 import domain.person.PersonService;
 import domain.person.Role;
 
 public class LoginTest {
-	private static PersonService persons = new PersonService();
+	private static PersonService persons = new PersonService(DBtypes.LOCALDB, null);
 
 	private String generateRandomEmail(String component) {
 		// generate random email adres in order to run test more than once

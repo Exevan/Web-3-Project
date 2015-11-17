@@ -1,11 +1,10 @@
-package db;
+package db.product;
 
 import java.util.List;
 
 import domain.product.Product;
 
-public interface productDbRepository {
-	boolean establishConnection(String username, String password);
+public interface ProductDbRepository {
 	Product get(String name);
 	List<Product> getAll();
 	void add(Product product);
