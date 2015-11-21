@@ -9,17 +9,17 @@ import domain.product.Product;
 
 public class ProductLocalRepository implements ProductDbRepository {
 
-	private Map<String, Product> products;
+	private Map<Integer, Product> products;
 
 	public ProductLocalRepository() {
-		products = new HashMap<String, Product>();
+		products = new HashMap<>();
 	}
 
-	public Product get(String productName) {
-		if (productName == null || productName.equals("")) {
-			throw new IllegalArgumentException("No id given");
+	public Product get(int id) {
+		if (id <= 0) {
+			throw new IllegalArgumentException("id must be greater than 0");
 		}
-		return products.get(productName);
+		return products.get(id);
 	}
 
 	public List<Product> getAll() {
@@ -30,24 +30,24 @@ public class ProductLocalRepository implements ProductDbRepository {
 		if (product == null) {
 			throw new IllegalArgumentException("No product given");
 		}
-		if (products.containsKey(product.getName())) {
+		if (products.containsKey(product.getId())) {
 			throw new IllegalArgumentException("Product already exists");
 		}
-		products.put(product.getName(), product);
+		products.put(product.getId(), product);
 	}
 
 	public void update(Product product) {
 		if (product == null) {
 			throw new IllegalArgumentException("No product given");
 		}
-		products.put(product.getName(), product);
+		products.put(product.getId(), product);
 	}
 
-	public void delete(String productName) {
-		if (productName == null) {
-			throw new IllegalArgumentException("No name given");
+	public void delete(int id) {
+		if (id <= 0) {
+			throw new IllegalArgumentException("id must be greater than 0");
 		}
-		products.remove(productName);
+		products.remove(id);
 	}
 
 }

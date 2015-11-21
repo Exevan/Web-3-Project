@@ -15,8 +15,8 @@ public class ProductService {
 		productRepository = factory.createProductDb(type, properties);
 	}
 	
-	public Product getProduct(String productName) {
-		return getProductRepository().get(productName);
+	public Product getProduct(int id) {
+		return getProductRepository().get(id);
 	}
 
 	public List<Product> getProducts() {
@@ -31,8 +31,8 @@ public class ProductService {
 		getProductRepository().update(product);
 	}
 
-	public void deleteProduct(String productName) {
-		getProductRepository().delete(productName);
+	public void deleteProduct(int id) {
+		getProductRepository().delete(id);
 	}
 
 	private ProductDbRepository getProductRepository() {

@@ -4,11 +4,17 @@ public class Product {
 	
 	private String name, description;
 	private double price;
+	private final int id;
 	
-	public Product(String name, String description, double price) {
+	public Product(int id, String name, String description, double price) {
 		this.name = name;
 		this.description = description;
 		this.price = price;
+		this.id = id;
+	}
+	
+	public int getId() {
+		return this.id;
 	}
 
 	public String getName() {
@@ -50,6 +56,28 @@ public class Product {
 	public static boolean isValidPrice(double price) {
 		if (price <= 0)
 			throw new IllegalArgumentException("Price must be greater than 0");
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Product other = (Product) obj;
+		if (id != other.id)
+			return false;
 		return true;
 	}
 	
