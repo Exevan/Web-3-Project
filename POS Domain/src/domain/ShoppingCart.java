@@ -22,13 +22,21 @@ public class ShoppingCart extends Observable {
 	}
 
 	public void addProduct(Product product) {
+		addProduct(product, 1);
+	}
+
+	public void addProduct(Product product, int quantity) {
 		if (product == null)
 			throw new IllegalArgumentException("The product may not be null");
 
 		if (products.containsKey(product)) {
-			products.put(product, products.get(product) + 1);
+			int old_value = products.get(product);
+			int new_value = old_value + quantity;
+			System.out.println("old_value: " + old_value);
+			System.out.println("new_value: " + new_value);
+			products.put(product,  new_value);
 		} else {
-			products.put(product, 1);
+			products.put(product, quantity);
 		}
 
 		setChanged();
@@ -40,6 +48,13 @@ public class ShoppingCart extends Observable {
 		for (Entry<Product, Integer> pair : products.entrySet()) {
 			sum += pair.getKey().getPrice() * pair.getValue();
 		}
+		return sum;
+	}
+
+	public int getOrderAmount() {
+		int sum = 0;
+		for (int quantity : products.values())
+			sum += quantity;
 		return sum;
 	}
 }

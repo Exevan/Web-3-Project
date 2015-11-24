@@ -88,12 +88,17 @@ public class WebshopFacade {
 
 	// cart things
 
-	public void createCart(String userId) {
-		if (cart != null) {
-			throw new IllegalArgumentException(
-					"There already is a cart, delete is first");
+	public ShoppingCart createCart(String userId) {
+		if (userId == null) {
+			if (cart == null) {
+				cart = shoppingCartService.createCart(null);
+				return null;
+			} else {
+				throw new IllegalArgumentException("There already is a cart, delete is first");
+			}
+		} else {
+			return shoppingCartService.createCart(userId);
 		}
-		cart = shoppingCartService.createCart(null);
 	}
 
 	public ShoppingCart getCart(String userId) {
@@ -138,6 +143,16 @@ public class WebshopFacade {
 			shoppingcart = shoppingCartService.getCart(userId);
 		}
 		shoppingcart.addProduct(product);
+	}
+	
+	public void addProductToCart(String userId, Product product, int quantity) {
+		if (shoppingCartService.getCart(userId) == null)
+			createCart(userId);
+		shoppingCartService.getCart(userId).addProduct(product, quantity);
+	}
+
+	public Object getOrderAmount(String userId) {
+		return shoppingCartService.getCart(userId).getOrderAmount();
 	}
 
 }

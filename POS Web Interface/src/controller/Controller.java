@@ -220,6 +220,10 @@ public class Controller extends HttpServlet {
 			errors.add("A user with this email does not exist");
 		} else if (user.isCorrectPassword(password)) {
 			request.getSession().setAttribute("user", user);
+			String userId = user.getUserId();
+			if (webshopFacade.getCart(userId) == null) {
+				webshopFacade.createCart(userId);
+			}
 		} else {
 			values.set(0, username);
 			errors.add("The password is incorrect");
@@ -512,20 +516,38 @@ public class Controller extends HttpServlet {
 	}
 	
 	private void processAddToCart(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws ServletException, IOException {
 		List<String> errors = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
 		values.add("");
 		
+		int productId = Integer.parseInt(request.getParameter("id"));
+		String userId = getUser(request).getUserId();
+		
 		int quantity = 0;
 		try {
-			String raw_id = request.getParameter("id");
-			quantity = Integer.parseInt(raw_id);
+			String raw_quantity = request.getParameter("quantity");
+			System.out.println("quantity from jsp: " + raw_quantity);
+			quantity = Integer.parseInt(raw_quantity);
 			Product.isValidQuantity(quantity);
-			values.set(0, raw_id);
+			values.set(0, raw_quantity);
 		} catch (IllegalArgumentException e) {
 			errors.add(e.getMessage());
 		}
+		
+		Product product = webshopFacade.getProduct(productId);
+		if (product == null) {
+			errors.add("The product does noet exist");
+		}
+		
+		if (!errors.isEmpty()) {
+			request.setAttribute("errors", errors);
+			request.setAttribute("values", values);
+		} else {
+			webshopFacade.addProductToCart(userId, product, quantity);
+		}
+
+		processRequest("productoverview", request, response);
 	}
 
 	private Person getUser(HttpServletRequest request) {
@@ -539,8 +561,9 @@ public class Controller extends HttpServlet {
 	private void forward(String destination, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		Person user = getUser(request);
-		if (destination.equals("index.jsp") && user != null) {
+		if (user != null) {
 			request.setAttribute("username", user.getFirstName());
+			request.setAttribute("cartamount", webshopFacade.getOrderAmount(user.getUserId()));
 		}
 
 		String style = getStyle(request);
