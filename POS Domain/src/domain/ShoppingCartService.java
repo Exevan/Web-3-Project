@@ -8,6 +8,7 @@ import java.util.Map;
  * volatile and should be kept by the object that asks for their creation
  */
 public class ShoppingCartService {
+	
 	private Map<String, ShoppingCart> carts; // maps userIds to carts
 
 	public ShoppingCartService() {
