@@ -22,6 +22,7 @@
 				<th>Name</th>
 				<th>Description</th>
 				<th>Price</th>
+				<th>Quantity</th>
 			</tr>
 			<c:forEach var="product" items="${products}">
 				<tr>
@@ -29,6 +30,7 @@
 				<td><c:out value="${product.name}" /></td>
 				<td><c:out value="${product.description}" /></td>
 				<td><c:out value="${product.price}" /></td>
+				<td><input type="number" id="quantity" name="quantity"></td>
 					<td><form method="post" action="Controller">
 							<input type="hidden" name="action" value="deleteproduct_start">
 							<input type="hidden" name="id" value="${product.id}">
@@ -38,6 +40,11 @@
 							<input type="hidden" name="action" value="updateproduct_start">
 							<input type="hidden" name="id" value="${product.id}">
 							<input type="submit" value="update">
+						</form></td>
+					<td><form method="post" action="Controller">
+							<input type="hidden" name="action" value="addtocart">
+							<input type="hidden" name="id" value="${product.id}">
+							<input type="submit" value="Add to cart">
 						</form></td>
 			</tr>
 			</c:forEach>

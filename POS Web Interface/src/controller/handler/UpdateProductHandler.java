@@ -10,7 +10,7 @@ import annotation.RequestMapping;
 import db.WebshopFacade;
 import domain.product.Product;
 
-@RequestMapping(action="updateproduct_complete")
+@RequestMapping(action = "updateproduct_complete")
 public class UpdateProductHandler extends Handler {
 
 	public UpdateProductHandler(WebshopFacade webshopFacade) {
@@ -24,16 +24,24 @@ public class UpdateProductHandler extends Handler {
 		List<String> values = new ArrayList<String>();
 		values.add("");
 		values.add("");
+		values.add("");
 
-		String name = request.getParameter("name"); // this should be okay
-													// because server supplied
-													// this
+		int id = Integer.parseInt(request.getParameter("id"));
+
+		String name = "";
+		try {
+			name = request.getParameter("name");
+			Product.isValidName(name);
+			values.set(0, name);
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
 
 		String desc = "";
 		try {
 			desc = request.getParameter("desc");
 			Product.isValidDescription(desc);
-			values.set(0, desc);
+			values.set(1, desc);
 		} catch (IllegalArgumentException e) {
 			errors.add(e.getMessage());
 		}
@@ -43,7 +51,7 @@ public class UpdateProductHandler extends Handler {
 			String raw_price = request.getParameter("price");
 			price = Double.parseDouble(raw_price);
 			Product.isValidPrice(price);
-			values.set(1, Double.toString(price));
+			values.set(2, Double.toString(price));
 		} catch (NumberFormatException e1) {
 			errors.add(e1.getMessage());
 
@@ -53,7 +61,7 @@ public class UpdateProductHandler extends Handler {
 
 		try {
 			if (errors.size() == 0)
-				webshopFacade.updateProduct(new Product(name, desc, price));
+				webshopFacade.updateProduct(new Product(id, name, desc, price));
 		} catch (IllegalArgumentException e) {
 			errors.add(e.getMessage());
 		}
@@ -66,7 +74,7 @@ public class UpdateProductHandler extends Handler {
 
 		List<Product> products = webshopFacade.getProducts();
 		request.setAttribute("products", products);
-		return "productoverview.jsp";		
+		return "productoverview.jsp";
 	}
 
 }

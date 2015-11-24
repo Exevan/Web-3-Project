@@ -16,16 +16,16 @@ public class WebshopFacade {
 	private final ProductService productService;
 	private final ShoppingCartService shoppingCartService;
 	private ShoppingCart cart;
-	
-	public WebshopFacade (Properties properties) {
+
+	public WebshopFacade(Properties properties) {
 		personService = new PersonService(DBtypes.LOCALDB, properties);
 		productService = new ProductService(DBtypes.LOCALDB, properties);
 		shoppingCartService = new ShoppingCartService();
 		cart = null; // for now there is the one anonymous cart.
 	}
-	
+
 	// product things
-	
+
 	public Product getProduct(int productId) {
 		return productService.getProduct(productId);
 	}
@@ -45,9 +45,9 @@ public class WebshopFacade {
 	public void deleteProduct(int productId) {
 		productService.deleteProduct(productId);
 	}
-	
+
 	// person things
-	
+
 	public Person getPerson(String personId) {
 		return personService.getPerson(personId);
 	}
@@ -65,7 +65,7 @@ public class WebshopFacade {
 	}
 
 	public void addPerson(Person person) {
-		if(canHaveAsPerson(person))
+		if (canHaveAsPerson(person))
 			personService.addPerson(person);
 	}
 
@@ -77,49 +77,67 @@ public class WebshopFacade {
 		personService.deletePerson(id);
 	}
 
-	public Person getAuthenticatedUser(String personId, String password) {		
+	public Person getAuthenticatedUser(String personId, String password) {
 		return personService.getAuthenticatedUser(personId, password);
 	}
-	
+
 	public Role getRole(String userId) {
 		Person person = personService.getPerson(userId);
 		return person == null ? null : person.getRole();
 	}
-	
+
 	// cart things
-	
-	public void createCart() {
+
+	public void createCart(String userId) {
 		if (cart != null) {
-			throw new IllegalArgumentException("There already is a cart, delete is first");
+			throw new IllegalArgumentException(
+					"There already is a cart, delete is first");
 		}
 		cart = shoppingCartService.createCart(null);
 	}
-	
-	public ShoppingCart getCart() {
-		return cart;
+
+	public ShoppingCart getCart(String userId) {
+		return userId == null ? cart : shoppingCartService.getCart(userId);
 	}
-	
-	public void deleteCart() {
-		if (cart == null) {
-			throw new IllegalArgumentException("There is no cart, only Zuul");
-		}
-		cart = null;
-	}
-	
-	public double getTotalFromCart() {
-		if (cart == null) {
-			throw new IllegalArgumentException("There is no cart");
+
+	public void deleteCart(String userId) {
+		if (userId == null) {
+			if (cart == null) {
+				throw new IllegalArgumentException(
+						"There is no cart, only Zuul");
+			}
+			cart = null;
 		} else {
-			return cart.getTotalPrice();
+			shoppingCartService.removeCart(userId);
 		}
 	}
-	
-	public void addProductToCart(Product product) {
-		if (cart == null) {
-			throw new IllegalArgumentException("There is no cart");
+
+	public double getTotalFromCart(String userId) {
+		ShoppingCart shoppingcart;
+		if (userId == null) {
+			if (cart == null) {
+				throw new IllegalArgumentException("There is no cart");
+			} else {
+				shoppingcart = cart;
+			}
 		} else {
-			cart.addProduct(product);
+			shoppingcart = shoppingCartService.getCart(userId);
 		}
+		return shoppingcart.getTotalPrice();
 	}
-	
+
+	public void addProductToCart(String userId, Product product) {
+		ShoppingCart shoppingcart;
+		if (userId == null) {
+			if (cart == null) {
+				throw new IllegalArgumentException("There is no cart");
+			} else {
+				shoppingcart = cart;
+			}
+		} else {
+			shoppingcart = shoppingCartService.getCart(userId);
+		}
+		shoppingcart.addProduct(product);
+	}
+
 }

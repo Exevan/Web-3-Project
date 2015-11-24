@@ -146,6 +146,9 @@ public class Controller extends HttpServlet {
 			case "home":
 				forward("index.jsp", request, response);
 				break;
+			case "addtocart":
+				processAddToCart(request, response);
+				break;
 			}
 		} catch (NotAuthorizedException e) {
 			List<String> errors = new ArrayList<>();
@@ -506,6 +509,23 @@ public class Controller extends HttpServlet {
 
 		request.setAttribute("values", values);
 		processRequest(action, request, response);
+	}
+	
+	private void processAddToCart(HttpServletRequest request,
+			HttpServletResponse response) {
+		List<String> errors = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
+		values.add("");
+		
+		int quantity = 0;
+		try {
+			String raw_id = request.getParameter("id");
+			quantity = Integer.parseInt(raw_id);
+			Product.isValidQuantity(quantity);
+			values.set(0, raw_id);
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
 	}
 
 	private Person getUser(HttpServletRequest request) {
