@@ -18,23 +18,25 @@
 		<a href="Controller?action=addproduct_start">New product</a>
 		<table>	
 			<tr>
-				<th>Product</th>
+				<th>ID</th>
+				<th>Name</th>
 				<th>Description</th>
 				<th>Price</th>
 			</tr>
 			<c:forEach var="product" items="${products}">
 				<tr>
+				<td><c:out value="${product.id}" /></td>
 				<td><c:out value="${product.name}" /></td>
 				<td><c:out value="${product.description}" /></td>
 				<td><c:out value="${product.price}" /></td>
 					<td><form method="post" action="Controller">
 							<input type="hidden" name="action" value="deleteproduct_start">
-							<input type="hidden" name="name" value="${product.name}">
+							<input type="hidden" name="id" value="${product.id}">
 							<input type="submit" value="delete">
 						</form></td>
 					<td><form method="post" action="Controller">
 							<input type="hidden" name="action" value="updateproduct_start">
-							<input type="hidden" name="name" value="${product.name}">
+							<input type="hidden" name="id" value="${product.id}">
 							<input type="submit" value="update">
 						</form></td>
 			</tr>

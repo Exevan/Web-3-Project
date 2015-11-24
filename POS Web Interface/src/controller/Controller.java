@@ -124,7 +124,7 @@ public class Controller extends HttpServlet {
 				break;
 			case "deleteproduct_start":
 				request.setAttribute("product",
-						webshopFacade.getProduct(request.getParameter("name")));
+						webshopFacade.getProduct(Integer.parseInt(request.getParameter("id"))));
 				forward("deleteproduct.jsp", request, response);
 				break;
 			case "deleteproduct_complete":
@@ -132,7 +132,7 @@ public class Controller extends HttpServlet {
 				break;
 			case "updateproduct_start":
 				request.setAttribute("product",
-						webshopFacade.getProduct(request.getParameter("name")));
+						webshopFacade.getProduct(Integer.parseInt(request.getParameter("id"))));
 				forward("updateproduct.jsp", request, response);
 				break;
 			case "updateproduct_complete":
@@ -148,6 +148,11 @@ public class Controller extends HttpServlet {
 				break;
 			}
 		} catch (NotAuthorizedException e) {
+			List<String> errors = new ArrayList<>();
+			errors.add(e.getMessage());
+			request.setAttribute("errors", errors);
+			forward("index.jsp", request, response);
+		} catch (NumberFormatException e) {
 			List<String> errors = new ArrayList<>();
 			errors.add(e.getMessage());
 			request.setAttribute("errors", errors);
@@ -314,6 +319,88 @@ public class Controller extends HttpServlet {
 		values.add("");
 		values.add("");
 		values.add("");
+		values.add("");
+
+		int id = 0;
+		try {
+			String raw_id = request.getParameter("id");
+			id = Integer.parseInt(raw_id);
+			Product.isValidId(id);
+			values.set(0, raw_id);
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
+
+		String name = "";
+		try {
+			name = request.getParameter("name");
+			Product.isValidName(name);
+			values.set(1, name);
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
+
+		String desc = "";
+		try {
+			desc = request.getParameter("desc");
+			Product.isValidDescription(desc);
+			values.set(2, desc);
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
+
+		double price = 0;
+		try {
+			String raw_price = request.getParameter("price");
+			price = Double.parseDouble(raw_price);
+			Product.isValidPrice(price);
+			values.set(3, Double.toString(price));
+		} catch (NumberFormatException e1) {
+			errors.add(e1.getMessage());
+
+		} catch (IllegalArgumentException e2) {
+			errors.add(e2.getMessage());
+		}
+
+		try {
+			if (errors.size() == 0)
+				webshopFacade.addProduct(new Product(id, name, desc, price));
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
+
+		String action = "home";
+
+		if (!errors.isEmpty()) {
+			request.setAttribute("errors", errors);
+			action = "addproduct_start";
+		}
+
+		request.setAttribute("values", values);
+		processRequest(action, request, response);
+	}
+
+	private void processProductDelete(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		webshopFacade.deleteProduct(Integer.parseInt(request.getParameter("id")));
+		processProductOverview(request, response);
+	}
+
+	private void processPersonDelete(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		webshopFacade.deletePerson(request.getParameter("mail"));
+		processUserOverview(request, response);
+	}
+
+	private void processProductUpdate(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		List<String> errors = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
+		values.add("");
+		values.add("");
+		values.add("");
+
+		int id = Integer.parseInt(request.getParameter("id"));
 
 		String name = "";
 		try {
@@ -348,70 +435,7 @@ public class Controller extends HttpServlet {
 
 		try {
 			if (errors.size() == 0)
-				webshopFacade.addProduct(new Product(name, desc, price));
-		} catch (IllegalArgumentException e) {
-			errors.add(e.getMessage());
-		}
-
-		String action = "home";
-
-		if (!errors.isEmpty()) {
-			request.setAttribute("errors", errors);
-			action = "addproduct_start";
-		}
-
-		request.setAttribute("values", values);
-		processRequest(action, request, response);
-	}
-
-	private void processProductDelete(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		webshopFacade.deleteProduct(request.getParameter("name"));
-		processProductOverview(request, response);
-	}
-
-	private void processPersonDelete(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		webshopFacade.deletePerson(request.getParameter("mail"));
-		processUserOverview(request, response);
-	}
-
-	private void processProductUpdate(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		List<String> errors = new ArrayList<String>();
-		List<String> values = new ArrayList<String>();
-		values.add("");
-		values.add("");
-
-		String name = request.getParameter("name"); // this should be okay
-													// because server supplied
-													// this
-
-		String desc = "";
-		try {
-			desc = request.getParameter("desc");
-			Product.isValidDescription(desc);
-			values.set(0, desc);
-		} catch (IllegalArgumentException e) {
-			errors.add(e.getMessage());
-		}
-
-		double price = 0;
-		try {
-			String raw_price = request.getParameter("price");
-			price = Double.parseDouble(raw_price);
-			Product.isValidPrice(price);
-			values.set(1, Double.toString(price));
-		} catch (NumberFormatException e1) {
-			errors.add(e1.getMessage());
-
-		} catch (IllegalArgumentException e2) {
-			errors.add(e2.getMessage());
-		}
-
-		try {
-			if (errors.size() == 0)
-				webshopFacade.updateProduct(new Product(name, desc, price));
+				webshopFacade.updateProduct(new Product(id, name, desc, price));
 		} catch (IllegalArgumentException e) {
 			errors.add(e.getMessage());
 		}

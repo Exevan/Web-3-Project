@@ -28,14 +28,18 @@
 				Product: ${product.name}
 			</p>
 			<p>
+				<label for="name">Name:</label> <input type="text" id="name"
+					name="name" value="${product.name}" value="${values[0]}">
+			</p>
+			<p>
 				<label for="desc">Description:</label> <input type="text" id="desc"
-					name="desc" value="${product.description}" value="${values[0]}">
+					name="desc" value="${product.description}" value="${values[1]}">
 			</p>
 			<p>
 				<label for="price">Price:</label> <input type="text" id="price"
-					name="price" value="${product.price}" value="${values[1]}">
+					name="price" value="${product.price}" value="${values[2]}">
 			</p>
-			<input type="hidden" id="name" name="name" value="${product.name}">
+			<input type="hidden" id="id" name="id" value="${product.id}">
 			<input type="hidden" name="action" value="updateproduct_complete">
 			<input type="submit" value="Update">
 		</form>

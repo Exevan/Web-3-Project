@@ -17,6 +17,8 @@
 		<main>
 		
 		<dl>
+		<dt>ID:</dt>
+		<dd>${product.id}</dd>
 		<dt>Name:</dt>
 		<dd>${product.name}</dd>
 		<dt>Description:</dt>
@@ -27,7 +29,7 @@
 		
 		<form method="POST" action="Controller">
 		<input type="hidden" name="action" value="deleteproduct_complete">
-		<input type="hidden" name="name" value="${product.name}">
+		<input type="hidden" name="id" value="${product.id}">
 		<input type="submit" value="Delete">
 		</form>
 		<a href="Controller?action=productoverview"><button type="button">Cancel</button></a>

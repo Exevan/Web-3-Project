@@ -16,6 +16,12 @@ public class Product {
 	public int getId() {
 		return this.id;
 	}
+	
+	public static boolean isValidId(int id) {
+		if (id <= 0)
+			throw new IllegalArgumentException("Id must be greater than 0");
+		return true;
+	}
 
 	public String getName() {
 		return name;
