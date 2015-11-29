@@ -1,0 +1,5 @@
+1 Edit build path (obviously)
+
+BUT ALSO:
+2 edit deployment assembly and project references
+R-click -> properties -> [deployment assembly / project references]

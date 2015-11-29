@@ -223,7 +223,7 @@ public class Controller extends HttpServlet {
 		} else if (user.isCorrectPassword(password)) {
 			request.getSession().setAttribute("user", user);
 			String userId = user.getUserId();
-			if (webshopFacade.getCart(userId) == null) {
+			if (webshopFacade.getCartFromUser(userId) == null) {
 				webshopFacade.createCart(userId);
 			}
 		} else {
@@ -529,12 +529,13 @@ public class Controller extends HttpServlet {
 		int quantity = 0;
 		try {
 			String raw_quantity = request.getParameter("quantity");
-			System.out.println("quantity from jsp: " + raw_quantity);
 			quantity = Integer.parseInt(raw_quantity);
 			Product.isValidQuantity(quantity);
 			values.set(0, raw_quantity);
-		} catch (IllegalArgumentException e) {
-			errors.add(e.getMessage());
+		} catch (NumberFormatException e1) {
+			errors.add("Please input a valid number");
+		} catch (IllegalArgumentException e2) {
+			errors.add(e2.getMessage());
 		}
 		
 		Product product = webshopFacade.getProduct(productId);
@@ -546,7 +547,7 @@ public class Controller extends HttpServlet {
 			request.setAttribute("errors", errors);
 			request.setAttribute("values", values);
 		} else {
-			webshopFacade.addProductToCart(userId, product, quantity);
+			webshopFacade.addProductToCartFromUser(userId, product, quantity);
 		}
 
 		processRequest("productoverview", request, response);
@@ -565,7 +566,7 @@ public class Controller extends HttpServlet {
 		Person user = getUser(request);
 		if (user != null) {
 			request.setAttribute("username", user.getFirstName());
-			request.setAttribute("cartamount", webshopFacade.getOrderAmount(user.getUserId()));
+			request.setAttribute("cartamount", webshopFacade.getTotalQtyFromUser(user.getUserId()));
 		}
 
 		String style = getStyle(request);

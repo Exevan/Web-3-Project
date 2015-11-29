@@ -14,7 +14,16 @@
 		<jsp:include page="header.jsp">
 			<jsp:param name="title" value="Products" />
 		</jsp:include>
-		<main> <a href="Controller?action=addproduct_start">New
+		<main> <c:if test="${not empty errors}">
+			<div class="alert-danger">
+				<ul>
+					<c:forEach items="${errors}" var="error">
+						<li>${error}</li>
+					</c:forEach>
+				</ul>
+			</div>
+		</c:if>
+		<a href="Controller?action=addproduct_start">New
 			product</a>
 		<table>
 			<tr>
