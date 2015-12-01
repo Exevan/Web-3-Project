@@ -5,14 +5,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Product overview</title>
+<title>Shoppingcart</title>
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <link rel="stylesheet" type="text/css" href="css/${style}.css">
 </head>
 <body>
 	<div id="container">
 		<jsp:include page="header.jsp">
-			<jsp:param name="title" value="Products" />
+			<jsp:param name="title" value="Shoppingcart" />
 		</jsp:include>
 		<main> <c:if test="${not empty errors}">
 			<div class="alert-danger">
@@ -23,51 +23,43 @@
 				</ul>
 			</div>
 		</c:if>
-		<a href="Controller?action=addproduct_start">New
-			product</a>
 		<table>
 			<tr>
 				<th>ID</th>
+				<th>otherID</th>
 				<th>Name</th>
 				<th>Description</th>
+				<th>Quantity</th>
 				<th>Price</th>
-				<c:if test="${not empty username}">
-					<th>Quantity</th>
-				</c:if>
 			</tr>
 			<c:forEach var="product" items="${products}">
 				<tr>
+					<td><c:out value="${product.product.id}" /></td>
 					<td><c:out value="${product.id}" /></td>
-					<td><c:out value="${product.name}" /></td>
-					<td><c:out value="${product.description}" /></td>
-					<td><c:out value="${product.price}" /></td>
+					<td><c:out value="${product.product.name}" /></td>
+					<td><c:out value="${product.product.description}" /></td>
+					<td><c:out value="${product.qty}"></c:out></td>
+					<td><c:out value="${product.total}" /></td>
 					<td><form method="post" action="Controller">
-							<input type="hidden" name="action" value="deleteproduct_start">
-							<input type="hidden" name="id" value="${product.id}"> <input
-								type="submit" value="delete">
-						</form></td>
-					<td><form method="post" action="Controller">
-							<input type="hidden" name="action" value="updateproduct_start">
+					<input type="number" id="quantity" name="quantity" min=0 value="${product.qty}">
+							<input type="hidden" name="action" value="updateshoppingcart">
 							<input type="hidden" name="id" value="${product.id}"> <input
 								type="submit" value="update">
 						</form></td>
-					<c:if test="${not empty username}">
-						<td><form method="post" action="Controller">
-								<input type="number" id="quantity" name="quantity" min=1 value=1> <input
-									type="hidden" name="action" value="addtocart"> <input
-									type="hidden" name="id" value="${product.id}"> <input
-									type="submit" value="Add to cart">
-							</form></td>
-					</c:if>
+					<td><form method="post" action="Controller">
+							<input type="hidden" name="action" value="deleteshoppingcart">
+							<input type="hidden" name="id" value="${product.id}"> <input
+								type="submit" value="delete">
+						</form></td>
 				</tr>
 			</c:forEach>
-			<caption>Product Overview</caption>
+			<caption>Shoppingcart</caption>
 		</table>
 		<c:if test="${not empty cartamount}">
-			<p><a href="Controller?action=cartoverview">Shopping Cart (${cartamount})</a></p>
+			<p>Shopping Cart (${cartamount})</p>
 		</c:if> </main>
 		<jsp:include page="footer.jsp">
-			<jsp:param name="origin" value="productoverview" />
+			<jsp:param name="origin" value="cartoverview" />
 		</jsp:include>
 	</div>
 </body>
