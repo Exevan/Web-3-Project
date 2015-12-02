@@ -86,6 +86,12 @@ public class Product {
 			return false;
 		return true;
 	}
+
+	public static boolean isValidQuantity(int quantity) {
+		if (quantity <= 0)
+			throw new IllegalArgumentException("quantity must be greater than 0");
+		return true;
+	}
 	
 	
 	

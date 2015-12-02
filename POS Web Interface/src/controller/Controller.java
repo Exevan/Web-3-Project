@@ -17,9 +17,13 @@ import javax.servlet.http.HttpSession;
 
 import db.WebshopFacade;
 import domain.NotAuthorizedException;
+import domain.ShoppingCart;
 import domain.person.Person;
 import domain.person.Role;
 import domain.product.Product;
+import domain.product.ShoppingCartProduct;
+
+//test line
 
 /**
  * Servlet implementation class Controller
@@ -76,16 +80,16 @@ public class Controller extends HttpServlet {
 		try {
 
 			switch (action) {
-			
+
 			case "login_start":
 				forward("login.jsp", request, response);
 				break;
 			case "login":
-				//DONE
+				// DONE
 				processLogin(request, response);
 				break;
 			case "logout":
-				//DONE
+				// DONE
 				processLogout(request, response);
 				break;
 			case "personoverview":
@@ -124,7 +128,8 @@ public class Controller extends HttpServlet {
 				break;
 			case "deleteproduct_start":
 				request.setAttribute("product",
-						webshopFacade.getProduct(Integer.parseInt(request.getParameter("id"))));
+						webshopFacade.getProduct(Integer.parseInt(request
+								.getParameter("id"))));
 				forward("deleteproduct.jsp", request, response);
 				break;
 			case "deleteproduct_complete":
@@ -132,7 +137,8 @@ public class Controller extends HttpServlet {
 				break;
 			case "updateproduct_start":
 				request.setAttribute("product",
-						webshopFacade.getProduct(Integer.parseInt(request.getParameter("id"))));
+						webshopFacade.getProduct(Integer.parseInt(request
+								.getParameter("id"))));
 				forward("updateproduct.jsp", request, response);
 				break;
 			case "updateproduct_complete":
@@ -145,6 +151,18 @@ public class Controller extends HttpServlet {
 				break;
 			case "home":
 				forward("index.jsp", request, response);
+				break;
+			case "addtocart":
+				processAddToCart(request, response);
+				break;
+			case "cartoverview":
+				processCartOverview(request, response);
+				break;
+			case "updateshoppingcart":
+				processUpdateShoppingcart(request, response);
+				break;
+			case "deleteshoppingcart":
+				processDeleteShoppingcart(request, response);
 				break;
 			}
 		} catch (NotAuthorizedException e) {
@@ -212,16 +230,20 @@ public class Controller extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("passwd");
 		Person user = webshopFacade.getPerson(username);
-		
+
 		if (user == null) {
 			errors.add("A user with this email does not exist");
 		} else if (user.isCorrectPassword(password)) {
 			request.getSession().setAttribute("user", user);
+			String userId = user.getUserId();
+			if (webshopFacade.getCartFromUser(userId) == null) {
+				webshopFacade.createCart(userId);
+			}
 		} else {
 			values.set(0, username);
 			errors.add("The password is incorrect");
 		}
-		
+
 		if (errors.size() > 0) {
 			request.setAttribute("errors", errors);
 			request.setAttribute("values", values);
@@ -248,6 +270,15 @@ public class Controller extends HttpServlet {
 		List<Product> products = webshopFacade.getProducts();
 		request.setAttribute("products", products);
 		forward("productoverview.jsp", request, response);
+	}
+
+	private void processCartOverview(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		String userId = getUser(request).getUserId();
+		List<ShoppingCartProduct> products = webshopFacade.getCartFromUser(
+				userId).getProducts();
+		request.setAttribute("products", products);
+		forward("cartoverview.jsp", request, response);
 	}
 
 	private void processRegister(HttpServletRequest request,
@@ -382,7 +413,8 @@ public class Controller extends HttpServlet {
 
 	private void processProductDelete(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		webshopFacade.deleteProduct(Integer.parseInt(request.getParameter("id")));
+		webshopFacade
+				.deleteProduct(Integer.parseInt(request.getParameter("id")));
 		processProductOverview(request, response);
 	}
 
@@ -508,6 +540,96 @@ public class Controller extends HttpServlet {
 		processRequest(action, request, response);
 	}
 
+	private void processAddToCart(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		List<String> errors = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
+		values.add("");
+
+		int productId = Integer.parseInt(request.getParameter("id"));
+		String userId = getUser(request).getUserId();
+
+		int quantity = 0;
+		try {
+			String raw_quantity = request.getParameter("quantity");
+			quantity = Integer.parseInt(raw_quantity);
+			Product.isValidQuantity(quantity);
+			values.set(0, raw_quantity);
+		} catch (NumberFormatException e1) {
+			errors.add("Please input a valid number");
+		} catch (IllegalArgumentException e2) {
+			errors.add(e2.getMessage());
+		}
+
+		Product product = webshopFacade.getProduct(productId);
+		if (product == null) {
+			errors.add("The product does not exist");
+		}
+
+		if (!errors.isEmpty()) {
+			request.setAttribute("errors", errors);
+			request.setAttribute("values", values);
+		} else {
+			webshopFacade.addProductToCartFromUser(userId, product, quantity);
+		}
+
+		processRequest("productoverview", request, response);
+	}
+
+	private void processDeleteShoppingcart(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		List<String> errors = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
+		values.add("");
+
+		int productId = Integer.parseInt(request.getParameter("id"));
+		String userId = getUser(request).getUserId();
+
+		if (!errors.isEmpty()) {
+			request.setAttribute("errors", errors);
+			request.setAttribute("values", values);
+		} else {
+			webshopFacade.getCartFromUser(userId).alterProductWithIndex(
+					productId, 0);
+		}
+
+		processRequest("cartoverview", request, response);
+	}
+
+	private void processUpdateShoppingcart(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		List<String> errors = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
+		values.add("");
+
+		int productId = Integer.parseInt(request.getParameter("id"));
+		String userId = getUser(request).getUserId();
+
+		int quantity = 0;
+		try {
+			String raw_quantity = request.getParameter("quantity");
+			quantity = Integer.parseInt(raw_quantity);
+			if (quantity < 0)
+				errors.add("quantity must be greater than or equal to 0");
+			else
+				values.set(0, raw_quantity);
+		} catch (NumberFormatException e1) {
+			errors.add("Please input a valid number");
+		} catch (IllegalArgumentException e2) {
+			errors.add(e2.getMessage());
+		}
+
+		if (!errors.isEmpty()) {
+			request.setAttribute("errors", errors);
+			request.setAttribute("values", values);
+		} else {
+			webshopFacade.getCartFromUser(userId).alterProductWithIndex(
+					productId, quantity);
+		}
+
+		processRequest("cartoverview", request, response);
+	}
+
 	private Person getUser(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		Person user = null;
@@ -519,8 +641,10 @@ public class Controller extends HttpServlet {
 	private void forward(String destination, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		Person user = getUser(request);
-		if (destination.equals("index.jsp") && user != null) {
+		if (user != null) {
 			request.setAttribute("username", user.getFirstName());
+			request.setAttribute("cartamount",
+					webshopFacade.getTotalQtyFromUser(user.getUserId()));
 		}
 
 		String style = getStyle(request);

@@ -34,4 +34,8 @@ public class ShoppingCartService {
 					"This customer doesn't have a cart to clear");
 		carts.remove(userId);
 	}
+
+	public ShoppingCart getCart(String userId) {
+		return carts.get(userId);
+	}
 }

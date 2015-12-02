@@ -19,7 +19,7 @@ public class DeleteProductHandler extends Handler {
 	@Override
 	public String handleRequest(HttpServletRequest request,
 			HttpServletResponse response) {
-		webshopFacade.deleteProduct(request.getParameter("name"));
+		webshopFacade.deleteProduct(Integer.parseInt(request.getParameter("id")));
 		
 		List<Product> products = webshopFacade.getProducts();
 		request.setAttribute("products", products);

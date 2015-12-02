@@ -25,12 +25,23 @@ public class AddProductHandler extends Handler {
 		values.add("");
 		values.add("");
 		values.add("");
+		values.add("");
+
+		int id = 0;
+		try {
+			String raw_id = request.getParameter("id");
+			id = Integer.parseInt(raw_id);
+			Product.isValidId(id);
+			values.set(0, raw_id);
+		} catch (IllegalArgumentException e) {
+			errors.add(e.getMessage());
+		}
 
 		String name = "";
 		try {
 			name = request.getParameter("name");
 			Product.isValidName(name);
-			values.set(0, name);
+			values.set(1, name);
 		} catch (IllegalArgumentException e) {
 			errors.add(e.getMessage());
 		}
@@ -39,7 +50,7 @@ public class AddProductHandler extends Handler {
 		try {
 			desc = request.getParameter("desc");
 			Product.isValidDescription(desc);
-			values.set(1, desc);
+			values.set(2, desc);
 		} catch (IllegalArgumentException e) {
 			errors.add(e.getMessage());
 		}
@@ -49,7 +60,7 @@ public class AddProductHandler extends Handler {
 			String raw_price = request.getParameter("price");
 			price = Double.parseDouble(raw_price);
 			Product.isValidPrice(price);
-			values.set(2, Double.toString(price));
+			values.set(3, Double.toString(price));
 		} catch (NumberFormatException e1) {
 			errors.add(e1.getMessage());
 
@@ -59,7 +70,7 @@ public class AddProductHandler extends Handler {
 
 		try {
 			if (errors.size() == 0)
-				webshopFacade.addProduct(new Product(name, desc, price));
+				webshopFacade.addProduct(new Product(id, name, desc, price));
 		} catch (IllegalArgumentException e) {
 			errors.add(e.getMessage());
 		}
