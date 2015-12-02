@@ -1,29 +1,37 @@
 package controller.handler;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.lang.reflect.AnnotatedType;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import util.ClassFinder;
+import annotation.RequestMapping;
 import db.WebshopFacade;
 
 public class HandlerFactory {
+	
+	private final ClassFinder classFinder;
+	private Map<String, Class<?>> requestMapping;
 	private final WebshopFacade facade;
 	
-	public HandlerFactory(WebshopFacade facade) {
+	public HandlerFactory(WebshopFacade facade) throws IOException {
 		this.facade = facade;
+		this.requestMapping = new HashMap<String, Class<?>>();
+		this.classFinder = new ClassFinder();
+		initializeHandlerMapping();
 	}
 	
 	private void initializeHandlerMapping() throws IOException {
-	    File[] files = getAllFiles("controller.handler");
+		List<Class<?>> classes = classFinder.getAllClasses("controller.handler");
+		for (Class<?> klass : classes) {
+			RequestMapping annotation = klass.getAnnotation(RequestMapping.class);
+			if (annotation != null)
+				requestMapping.put(annotation.action(), klass);
+		}
 	}
 	
-	private File[] getAllFiles(String packageName) throws IOException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        String path = packageName.replace(".", System.getProperty("file.separator"));
-        URL fullPath = classLoader.getResource(path);
-        File folder = new File(fullPath.getFile());
-        return folder.listFiles();
-    }
 	
 	
 	
