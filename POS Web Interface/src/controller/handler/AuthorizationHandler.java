@@ -5,8 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import annotation.RequestMapping;
-import db.WebshopFacade;
 import domain.NotAuthorizedException;
+import domain.WebshopFacade;
 import domain.person.Person;
 import domain.person.Role;
 

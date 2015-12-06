@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import annotation.RequestMapping;
-import db.WebshopFacade;
+import domain.WebshopFacade;
 
 @RequestMapping(action="logout")
 public class LogoutHandler extends Handler {

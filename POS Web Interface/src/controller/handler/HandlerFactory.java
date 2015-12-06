@@ -8,7 +8,7 @@ import java.util.Map;
 
 import util.ClassFinder;
 import annotation.RequestMapping;
-import db.WebshopFacade;
+import domain.WebshopFacade;
 
 public class HandlerFactory {
 	

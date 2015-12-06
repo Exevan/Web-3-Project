@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import db.WebshopFacade;
 import domain.NotAuthorizedException;
 import domain.ShoppingCart;
+import domain.WebshopFacade;
 import domain.person.Person;
 import domain.person.Role;
 import domain.product.Product;

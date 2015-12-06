@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import annotation.RequestMapping;
-import db.WebshopFacade;
+import domain.WebshopFacade;
 import domain.person.Person;
 
 @RequestMapping(action="personoverview")

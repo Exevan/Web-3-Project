@@ -3,7 +3,7 @@ package controller.handler;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import db.WebshopFacade;
+import domain.WebshopFacade;
 
 public abstract class Handler {
 

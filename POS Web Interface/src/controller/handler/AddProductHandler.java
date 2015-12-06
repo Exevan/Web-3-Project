@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import annotation.RequestMapping;
-import db.WebshopFacade;
+import domain.WebshopFacade;
 import domain.product.Product;
 
 @RequestMapping(action="addproduct_complete")
