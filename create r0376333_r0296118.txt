@@ -35,7 +35,10 @@ CREATE TABLE r0376333_r0296118.discount
   code VARCHAR(32) NOT NULL,
   amount REAL NOT NULL,
   threshold REAL NULL,
-  CONSTRAINT discount_pkey PRIMARY KEY (code)
+  product_id INT NULL,
+  type VARCHAR(32) NOT NULL,
+  CONSTRAINT discount_pkey PRIMARY KEY (code),
+  CONSTRAINT product_fkey FOREIGN KEY (product_id) REFERENCES r0376333_r0296118.product (id)
 );
 GRANT ALL ON TABLE r0376333_r0296118.discount TO r0376333;
 GRANT ALL ON TABLE r0376333_r0296118.discount TO r0296118;

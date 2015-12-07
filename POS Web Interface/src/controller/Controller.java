@@ -16,12 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import domain.NotAuthorizedException;
-import domain.ShoppingCart;
 import domain.WebshopFacade;
 import domain.person.Person;
 import domain.person.Role;
 import domain.product.Product;
-import domain.product.ShoppingCartProduct;
+import domain.shoppingcartproduct.ShoppingCartProduct;
 
 //test line
 
@@ -589,7 +588,7 @@ public class Controller extends HttpServlet {
 			request.setAttribute("errors", errors);
 			request.setAttribute("values", values);
 		} else {
-			webshopFacade.getCartFromUser(userId).alterProductWithId(
+			webshopFacade.getCartFromUser(userId).alterProduct(
 					productId, 0);
 		}
 
@@ -623,7 +622,7 @@ public class Controller extends HttpServlet {
 			request.setAttribute("errors", errors);
 			request.setAttribute("values", values);
 		} else {
-			webshopFacade.getCartFromUser(userId).alterProductWithId(
+			webshopFacade.getCartFromUser(userId).alterProduct(
 					productId, quantity);
 		}
 
