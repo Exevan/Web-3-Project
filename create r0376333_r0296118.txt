@@ -37,8 +37,7 @@ CREATE TABLE r0376333_r0296118.discount
   threshold REAL NULL,
   product_id INT NULL,
   type VARCHAR(32) NOT NULL,
-  CONSTRAINT discount_pkey PRIMARY KEY (code),
-  CONSTRAINT product_fkey FOREIGN KEY (product_id) REFERENCES r0376333_r0296118.product (id)
+  CONSTRAINT discount_pkey PRIMARY KEY (code)
 );
 GRANT ALL ON TABLE r0376333_r0296118.discount TO r0376333;
 GRANT ALL ON TABLE r0376333_r0296118.discount TO r0296118;
@@ -49,9 +48,7 @@ CREATE TABLE r0376333_r0296118.shoppingcart
   id INT NOT NULL,
   email VARCHAR(255) NULL,
   discount_code VARCHAR(32) NULL,
-  CONSTRAINT shoppingcart_pkey PRIMARY KEY (id),
-  CONSTRAINT person_fkey FOREIGN KEY (email) REFERENCES r0376333_r0296118.person (email),
-  CONSTRAINT discount_fkey FOREIGN KEY (discount_code) REFERENCES r0376333_r0296118.discount (code)
+  CONSTRAINT shoppingcart_pkey PRIMARY KEY (id)
 );
 GRANT ALL ON TABLE r0376333_r0296118.shoppingcart TO r0376333;
 GRANT ALL ON TABLE r0376333_r0296118.shoppingcart TO r0296118;
