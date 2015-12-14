@@ -39,7 +39,7 @@ public class UpdateShoppingCartHandler extends Handler {
 			request.setAttribute("errors", errors);
 			request.setAttribute("values", values);
 		} else {
-			webshopFacade.getCartFromUser(userId).alterProductWithIndex(
+			webshopFacade.getCartFromUser(userId).alterProduct(
 					productId, quantity);
 		}
 

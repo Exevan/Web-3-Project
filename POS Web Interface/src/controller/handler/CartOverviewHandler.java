@@ -6,7 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import annotation.RequestMapping;
-import domain.product.ShoppingCartProduct;
+import domain.shoppingcartproduct.ShoppingCartProduct;
+
 
 @RequestMapping(action="cartoverview")
 public class CartOverviewHandler extends Handler {

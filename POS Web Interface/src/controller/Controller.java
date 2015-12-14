@@ -17,12 +17,12 @@ import javax.servlet.http.HttpSession;
 
 import controller.handler.Handler;
 import controller.handler.HandlerFactory;
-import db.WebshopFacade;
 import domain.NotAuthorizedException;
+import domain.WebshopFacade;
 import domain.person.Person;
 import domain.person.Role;
 import domain.product.Product;
-import domain.product.ShoppingCartProduct;
+import domain.shoppingcartproduct.ShoppingCartProduct;
 
 //test line
 

@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import db.WebshopFacade;
+import domain.WebshopFacade;
 import domain.person.Person;
 
 public abstract class Handler {
