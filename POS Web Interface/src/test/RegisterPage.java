@@ -37,9 +37,12 @@ public class RegisterPage {
 		passwordField.sendKeys(password);
 	}
 	
-	public UserOverviewPage register() {
+	public UserOverviewPage register(boolean redirect) {
 		WebElement loginButton = driver.findElement(By.id("signUp"));
 		loginButton.click();
-		return new UserOverviewPage(driver);
+		if (redirect)
+			return new UserOverviewPage(driver);
+		else
+			return null;
 	}
 }

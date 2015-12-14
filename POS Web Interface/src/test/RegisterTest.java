@@ -1,8 +1,7 @@
 package test;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,19 +39,19 @@ public class RegisterTest {
 	}
 
 	private UserOverviewPage submitForm(RegisterPage registerPage,
-			String firstName, String lastName, String email, String password) {
+			String firstName, String lastName, String email, String password, boolean redirect) {
 		registerPage.setFirstName(firstName);
 		registerPage.setLastName(lastName);
 		registerPage.setUserId(email);
 		registerPage.setPassword(password);
 
-		return registerPage.register();
+		return registerPage.register(redirect);
 	}
 
 	@Test
 	public void testRegisterCorrect() {
 		String randomEmail = generateRandomEmail("jan.janssens@hotmail.com");
-		UserOverviewPage userOverviewPage = submitForm(new RegisterPage(driver), "Jan", "Janssens", randomEmail, "1234");
+		UserOverviewPage userOverviewPage = submitForm(new RegisterPage(driver), "Jan", "Janssens", randomEmail, "1234", true);
 
 		assertTrue(userOverviewPage.isCurrentPage());
 
@@ -63,7 +62,7 @@ public class RegisterTest {
 	@Test
 	public void testRegisterFirstNameEmpty() {
 		RegisterPage registerPage = new RegisterPage(driver);
-		submitForm(registerPage, "", "Janssens", "jan.janssens@hotmail.com", "1234");
+		submitForm(registerPage, "", "Janssens", "jan.janssens@hotmail.com", "1234", false);
 		// HOLD UP! We will never see the error.
 		
 		String title = driver.getTitle();
@@ -86,7 +85,7 @@ public class RegisterTest {
 	@Test
 	public void testRegisterLastNameEmpty() {
 		RegisterPage registerPage = new RegisterPage(driver);
-		submitForm(registerPage, "Jan", "", "jan.janssens@hotmail.com", "1234");
+		submitForm(registerPage, "Jan", "", "jan.janssens@hotmail.com", "1234", false);
 
 		String title = driver.getTitle();
 		assertEquals("Sign Up", title);
@@ -107,7 +106,7 @@ public class RegisterTest {
 	@Test
 	public void testRegisterEmailEmpty() {
 		RegisterPage registerPage = new RegisterPage(driver);
-		submitForm(registerPage, "Jan", "Janssens", "", "1234");
+		submitForm(registerPage, "Jan", "Janssens", "", "1234", false);
 
 		String title = driver.getTitle();
 		assertEquals("Sign Up", title);
@@ -128,7 +127,7 @@ public class RegisterTest {
 	@Test
 	public void testRegisterPasswordEmpty() {
 		RegisterPage registerPage = new RegisterPage(driver);
-		submitForm(registerPage, "Jan", "Janssens", "jan.janssens@hotmail.com", "");
+		submitForm(registerPage, "Jan", "Janssens", "jan.janssens@hotmail.com", "", false);
 
 		String title = driver.getTitle();
 		assertEquals("Sign Up", title);
@@ -150,10 +149,10 @@ public class RegisterTest {
 	public void testRegisterUserAlreadyExists() {
 		String emailRandom = generateRandomEmail("pieter.pieters@hotmail.com");
 		RegisterPage registerPage = new RegisterPage(driver);
-		submitForm(registerPage, "Pieter", "Pieters", emailRandom, "1234");
+		submitForm(registerPage, "Pieter", "Pieters", emailRandom, "1234", false);
 
 		registerPage = new RegisterPage(driver);
-		submitForm(registerPage, "Pieter", "Pieters", emailRandom, "1234");
+		submitForm(registerPage, "Pieter", "Pieters", emailRandom, "1234", false);
 
 		WebElement errorMsg = driver.findElement(By.cssSelector("div.alert-danger ul li"));
 		assertEquals("User already exists", errorMsg.getText());

@@ -22,7 +22,6 @@ public class UserOverviewPage {
 
 	public boolean hasRow(String string) {
 		ArrayList<WebElement> tableRows=(ArrayList<WebElement>) driver.findElements(By.cssSelector("table tr"));
-		boolean found=false;
 		for (WebElement tableRow:tableRows) {
 			String email = tableRow.getText();
 			if (email.equals(string)) {
