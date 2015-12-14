@@ -1,8 +1,7 @@
 package test;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -14,177 +13,158 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class RegisterTest {
 	private WebDriver driver;
-	
+
 	@Before
 	public void setUp() {
-		driver=new FirefoxDriver();
+		driver = new FirefoxDriver();
 		login();
-		driver.get("http://localhost:8080/POS_Web_Interface/register.jsp");
 	}
-	
+
 	@After
 	public void clean() {
 		driver.quit();
 	}
-	
+
 	private void login() {
-		driver.get("http://localhost:8080/POS_Web_Interface/login.jsp");
-		
-		fillOutField("username", "admin@ucll.be");
-		fillOutField("passwd", "t");
-		
-		WebElement button=driver.findElement(By.id("login"));
-		button.click();
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.setUserId("admin@ucll.be");
+		loginPage.setPassword("t");
+		loginPage.login();
 	}
-	
+
 	private String generateRandomEmail(String component) {
 		// generate random email address in order to run test more than once
-		int random = (int)(Math. random() * 1000 + 1);
-		return random+component;
+		int random = (int) (Math.random() * 1000 + 1);
+		return random + component;
 	}
-		
-	private void fillOutField(String name,String value) {
-		WebElement field=driver.findElement(By.id(name));
-		field.clear();
-		field.sendKeys(value);
+
+	private UserOverviewPage submitForm(RegisterPage registerPage,
+			String firstName, String lastName, String email, String password, boolean redirect) {
+		registerPage.setFirstName(firstName);
+		registerPage.setLastName(lastName);
+		registerPage.setUserId(email);
+		registerPage.setPassword(password);
+
+		return registerPage.register(redirect);
 	}
-	
-	private void submitForm(String firstName,String lastName, String email, String password) {
-		fillOutField("firstName", firstName);
-		fillOutField("lastName",lastName);
-		fillOutField("email", email);
-		fillOutField("password", password);
-		
-		WebElement button=driver.findElement(By.id("signUp"));
-		button.click();
-	}
-	
 
 	@Test
 	public void testRegisterCorrect() {
-		String randomEmail=generateRandomEmail("jan.janssens@hotmail.com");
-		submitForm("Jan", "Janssens", randomEmail , "1234");
-		
-		String title=driver.getTitle();
-		assertEquals("Home",title);
-		
-		driver.get("http://localhost:8080/POS_Web_Interface/Controller?action=personoverview");
-		
-		ArrayList<WebElement> tableRows=(ArrayList<WebElement>) driver.findElements(By.cssSelector("table tr"));
-		boolean found=false;
-		for (WebElement tableRow:tableRows) {
-			String email = tableRow.getText();
-			if (email.equals(randomEmail+" Jan Janssens CUSTOMER")) {
-				found=true;
-			}
-		}
-		assertEquals(true, found);
-		
+		String randomEmail = generateRandomEmail("jan.janssens@hotmail.com");
+		UserOverviewPage userOverviewPage = submitForm(new RegisterPage(driver), "Jan", "Janssens", randomEmail, "1234", true);
+
+		assertTrue(userOverviewPage.isCurrentPage());
+
+		assertTrue(userOverviewPage.hasRow(randomEmail + " Jan Janssens CUSTOMER"));
+
 	}
-	
+
 	@Test
-	public void testRegisterFirstNameEmpty(){
-		submitForm("", "Janssens", "jan.janssens@hotmail.com", "1234");
+	public void testRegisterFirstNameEmpty() {
+		RegisterPage registerPage = new RegisterPage(driver);
+		submitForm(registerPage, "", "Janssens", "jan.janssens@hotmail.com", "1234", false);
+		// HOLD UP! We will never see the error.
 		
-		String title=driver.getTitle();
-		assertEquals("Sign Up",title);
-		
-		WebElement errorMsg = driver.findElement(By.cssSelector("div.alert-danger ul li"));
+		String title = driver.getTitle();
+		assertEquals("Sign Up", title);
+
+		WebElement errorMsg = driver.findElement(By
+				.cssSelector("div.alert-danger ul li"));
 		assertEquals("No first name given", errorMsg.getText());
 
-		WebElement fieldFirstName=driver.findElement(By.id("firstName"));
-		assertEquals("",fieldFirstName.getAttribute("value"));
-		
-		WebElement fieldLastName=driver.findElement(By.id("lastName"));
-		assertEquals("Janssens",fieldLastName.getAttribute("value"));
-		
-		WebElement fieldEmail=driver.findElement(By.id("email"));
-		assertEquals("jan.janssens@hotmail.com",fieldEmail.getAttribute("value"));
+		WebElement fieldFirstName = driver.findElement(By.id("firstName"));
+		assertEquals("", fieldFirstName.getAttribute("value"));
+
+		WebElement fieldLastName = driver.findElement(By.id("lastName"));
+		assertEquals("Janssens", fieldLastName.getAttribute("value"));
+
+		WebElement fieldEmail = driver.findElement(By.id("email"));
+		assertEquals("jan.janssens@hotmail.com", fieldEmail.getAttribute("value"));
 	}
 
 	@Test
-	public void testRegisterLastNameEmpty(){
-		submitForm("Jan", "", "jan.janssens@hotmail.com", "1234");
-		
-		String title=driver.getTitle();
-		assertEquals("Sign Up",title);
-		
+	public void testRegisterLastNameEmpty() {
+		RegisterPage registerPage = new RegisterPage(driver);
+		submitForm(registerPage, "Jan", "", "jan.janssens@hotmail.com", "1234", false);
+
+		String title = driver.getTitle();
+		assertEquals("Sign Up", title);
+
 		WebElement errorMsg = driver.findElement(By.cssSelector("div.alert-danger ul li"));
 		assertEquals("No last name given", errorMsg.getText());
 
-		WebElement fieldFirstName=driver.findElement(By.id("firstName"));
-		assertEquals("Jan",fieldFirstName.getAttribute("value"));
-		
-		WebElement fieldLastName=driver.findElement(By.id("lastName"));
-		assertEquals("",fieldLastName.getAttribute("value"));
-		
-		WebElement fieldEmail=driver.findElement(By.id("email"));
-		assertEquals("jan.janssens@hotmail.com",fieldEmail.getAttribute("value"));
+		WebElement fieldFirstName = driver.findElement(By.id("firstName"));
+		assertEquals("Jan", fieldFirstName.getAttribute("value"));
+
+		WebElement fieldLastName = driver.findElement(By.id("lastName"));
+		assertEquals("", fieldLastName.getAttribute("value"));
+
+		WebElement fieldEmail = driver.findElement(By.id("email"));
+		assertEquals("jan.janssens@hotmail.com", fieldEmail.getAttribute("value"));
 	}
 
 	@Test
-	public void testRegisterEmailEmpty(){
-		submitForm("Jan", "Janssens", "", "1234");
-		
-		String title=driver.getTitle();
-		assertEquals("Sign Up",title);
-		
+	public void testRegisterEmailEmpty() {
+		RegisterPage registerPage = new RegisterPage(driver);
+		submitForm(registerPage, "Jan", "Janssens", "", "1234", false);
+
+		String title = driver.getTitle();
+		assertEquals("Sign Up", title);
+
 		WebElement errorMsg = driver.findElement(By.cssSelector("div.alert-danger ul li"));
 		assertEquals("No id given", errorMsg.getText());
 
-		WebElement fieldFirstName=driver.findElement(By.id("firstName"));
-		assertEquals("Jan",fieldFirstName.getAttribute("value"));
-		
-		WebElement fieldLastName=driver.findElement(By.id("lastName"));
-		assertEquals("Janssens",fieldLastName.getAttribute("value"));
-		
-		WebElement fieldEmail=driver.findElement(By.id("email"));
-		assertEquals("",fieldEmail.getAttribute("value"));
+		WebElement fieldFirstName = driver.findElement(By.id("firstName"));
+		assertEquals("Jan", fieldFirstName.getAttribute("value"));
+
+		WebElement fieldLastName = driver.findElement(By.id("lastName"));
+		assertEquals("Janssens", fieldLastName.getAttribute("value"));
+
+		WebElement fieldEmail = driver.findElement(By.id("email"));
+		assertEquals("", fieldEmail.getAttribute("value"));
 	}
 
-
 	@Test
-	public void testRegisterPasswordEmpty(){
-		submitForm("Jan", "Janssens", "jan.janssens@hotmail.com", "");
-		
-		String title=driver.getTitle();
-		assertEquals("Sign Up",title);
-		
+	public void testRegisterPasswordEmpty() {
+		RegisterPage registerPage = new RegisterPage(driver);
+		submitForm(registerPage, "Jan", "Janssens", "jan.janssens@hotmail.com", "", false);
+
+		String title = driver.getTitle();
+		assertEquals("Sign Up", title);
+
 		WebElement errorMsg = driver.findElement(By.cssSelector("div.alert-danger ul li"));
 		assertEquals("No password given", errorMsg.getText());
 
-		WebElement fieldFirstName=driver.findElement(By.id("firstName"));
-		assertEquals("Jan",fieldFirstName.getAttribute("value"));
-		
-		WebElement fieldLastName=driver.findElement(By.id("lastName"));
-		assertEquals("Janssens",fieldLastName.getAttribute("value"));
-		
-		WebElement fieldEmail=driver.findElement(By.id("email"));
-		assertEquals("jan.janssens@hotmail.com",fieldEmail.getAttribute("value"));
-	}
-	
-	@Test
-	public void testRegisterUserAlreadyExists(){
-		String emailRandom = generateRandomEmail("pieter.pieters@hotmail.com");
-		submitForm("Pieter", "Pieters", emailRandom, "1234");
-		
-		//driver=new FirefoxDriver();
-		driver.get("http://localhost:8080/POS_Web_Interface/register.jsp");
+		WebElement fieldFirstName = driver.findElement(By.id("firstName"));
+		assertEquals("Jan", fieldFirstName.getAttribute("value"));
 
-		submitForm("Pieter", "Pieters", emailRandom, "1234");
-		
+		WebElement fieldLastName = driver.findElement(By.id("lastName"));
+		assertEquals("Janssens", fieldLastName.getAttribute("value"));
+
+		WebElement fieldEmail = driver.findElement(By.id("email"));
+		assertEquals("jan.janssens@hotmail.com", fieldEmail.getAttribute("value"));
+	}
+
+	@Test
+	public void testRegisterUserAlreadyExists() {
+		String emailRandom = generateRandomEmail("pieter.pieters@hotmail.com");
+		RegisterPage registerPage = new RegisterPage(driver);
+		submitForm(registerPage, "Pieter", "Pieters", emailRandom, "1234", false);
+
+		registerPage = new RegisterPage(driver);
+		submitForm(registerPage, "Pieter", "Pieters", emailRandom, "1234", false);
+
 		WebElement errorMsg = driver.findElement(By.cssSelector("div.alert-danger ul li"));
 		assertEquals("User already exists", errorMsg.getText());
 
-		WebElement fieldFirstName=driver.findElement(By.id("firstName"));
-		assertEquals("Pieter",fieldFirstName.getAttribute("value"));
-		
-		WebElement fieldLastName=driver.findElement(By.id("lastName"));
-		assertEquals("Pieters",fieldLastName.getAttribute("value"));
-		
-		WebElement fieldEmail=driver.findElement(By.id("email"));
-		assertEquals(emailRandom,fieldEmail.getAttribute("value"));
+		WebElement fieldFirstName = driver.findElement(By.id("firstName"));
+		assertEquals("Pieter", fieldFirstName.getAttribute("value"));
+
+		WebElement fieldLastName = driver.findElement(By.id("lastName"));
+		assertEquals("Pieters", fieldLastName.getAttribute("value"));
+
+		WebElement fieldEmail = driver.findElement(By.id("email"));
+		assertEquals(emailRandom, fieldEmail.getAttribute("value"));
 	}
-	
 
 }

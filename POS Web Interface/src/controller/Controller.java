@@ -632,7 +632,7 @@ public class Controller extends HttpServlet {
 			request.setAttribute("errors", errors);
 			request.setAttribute("values", values);
 		} else {
-			webshopFacade.getCartFromUser(userId).alterProductWithIndex(
+			webshopFacade.getCartFromUser(userId).alterProduct(
 					productId, 0);
 		}
 
@@ -666,7 +666,7 @@ public class Controller extends HttpServlet {
 			request.setAttribute("errors", errors);
 			request.setAttribute("values", values);
 		} else {
-			webshopFacade.getCartFromUser(userId).alterProductWithIndex(
+			webshopFacade.getCartFromUser(userId).alterProduct(
 					productId, quantity);
 		}
 
