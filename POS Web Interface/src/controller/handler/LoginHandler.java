@@ -7,19 +7,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import annotation.RequestMapping;
-import db.WebshopFacade;
 import domain.person.Person;
 
+@RequestMapping(action="login_start")
 @RequestMapping(action="login")
-public abstract class LoginHandler extends Handler{
-	
-	public LoginHandler(WebshopFacade webshopFacade) {
-		super(webshopFacade);
-	}
+public class LoginHandler extends Handler{
 	
 	@Override
-	public String handleRequest(HttpServletRequest request, 
+	public String handleRequest(String action, HttpServletRequest request, 
 			HttpServletResponse response) {
+		
+		if (action.equals("login_start"))
+			return "login.jsp";
+		
+		
 		List<String> errors = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
 		values.add("");
@@ -40,7 +41,7 @@ public abstract class LoginHandler extends Handler{
 		if (errors.size() > 0) {
 			request.setAttribute("errors", errors);
 			request.setAttribute("values", values);
-			return "login_start";
+			return "login.jsp";
 		} else
 			return "home";
 		

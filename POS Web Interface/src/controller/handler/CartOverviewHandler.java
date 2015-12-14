@@ -6,17 +6,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import annotation.RequestMapping;
-import domain.product.Product;
+import domain.product.ShoppingCartProduct;
 
-@RequestMapping(action="productoverview")
-public class ProductOverviewHandler extends Handler {
+@RequestMapping(action="cartoverview")
+public class CartOverviewHandler extends Handler {
 
 	@Override
 	public String handleRequest(String action, HttpServletRequest request,
 			HttpServletResponse response) {
-		List<Product> products = webshopFacade.getProducts();
+		String userId = getUser(request).getUserId();
+		List<ShoppingCartProduct> products = webshopFacade.getCartFromUser(
+				userId).getProducts();
 		request.setAttribute("products", products);
-		return "productoverview.jsp";
+		return "cartoverview.jsp";
 	}
-
 }

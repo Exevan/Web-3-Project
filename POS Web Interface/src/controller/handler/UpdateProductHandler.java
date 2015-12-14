@@ -7,19 +7,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import annotation.RequestMapping;
-import db.WebshopFacade;
 import domain.product.Product;
 
+@RequestMapping(action = "updateproduct_start")
 @RequestMapping(action = "updateproduct_complete")
 public class UpdateProductHandler extends Handler {
-
-	public UpdateProductHandler(WebshopFacade webshopFacade) {
-		super(webshopFacade);
-	}
-
 	@Override
-	public String handleRequest(HttpServletRequest request,
+	public String handleRequest(String action, HttpServletRequest request,
 			HttpServletResponse response) {
+		
+		if(action.equals("updateproduct_start")) {
+			request.setAttribute("product",
+					webshopFacade.getProduct(Integer.parseInt(request
+							.getParameter("id"))));
+			return "updateproduct.jsp";
+		}
+		
 		List<String> errors = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
 		values.add("");
@@ -69,12 +72,12 @@ public class UpdateProductHandler extends Handler {
 		if (!errors.isEmpty()) {
 			request.setAttribute("values", values);
 			request.setAttribute("errors", errors);
-			return "updateproduct.jsp";
+			return "updateproduct_start";
 		}
 
 		List<Product> products = webshopFacade.getProducts();
 		request.setAttribute("products", products);
-		return "productoverview.jsp";
+		return "productoverview";
 	}
 
 }

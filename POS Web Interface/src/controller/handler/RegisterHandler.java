@@ -7,19 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import annotation.RequestMapping;
-import db.WebshopFacade;
 import domain.person.Person;
 import domain.person.Role;
 
 @RequestMapping(action="addperson_complete")
 public class RegisterHandler extends Handler {
 
-	public RegisterHandler(WebshopFacade webshopFacade) {
-		super(webshopFacade);
-	}
-
 	@Override
-	public String handleRequest(HttpServletRequest request,
+	public String handleRequest(String action, HttpServletRequest request,
 			HttpServletResponse response) {
 		List<String> errors = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
@@ -70,7 +65,7 @@ public class RegisterHandler extends Handler {
 			errors.add(e.getMessage());
 		}
 
-		String action = "home";
+		action = "home";
 
 		if (!errors.isEmpty()) {
 			request.setAttribute("errors", errors);

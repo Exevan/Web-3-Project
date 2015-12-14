@@ -15,9 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import controller.handler.Handler;
+import controller.handler.HandlerFactory;
 import db.WebshopFacade;
 import domain.NotAuthorizedException;
-import domain.ShoppingCart;
 import domain.person.Person;
 import domain.person.Role;
 import domain.product.Product;
@@ -31,6 +32,7 @@ import domain.product.ShoppingCartProduct;
 @WebServlet("/Controller")
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private HandlerFactory handlerFactory;
 	private WebshopFacade webshopFacade;
 
 	/**
@@ -55,6 +57,11 @@ public class Controller extends HttpServlet {
 		}
 
 		webshopFacade = new WebshopFacade(properties);
+		try {
+			handlerFactory = new HandlerFactory(webshopFacade);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	protected void doGet(HttpServletRequest request,
@@ -71,8 +78,44 @@ public class Controller extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		processRequest(request.getParameter("action"), request, response);
 	}
-
+	
 	private void processRequest(String action, HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		action = (action == null) ? "home" : action;
+		
+		switch (action) {
+		case "home":
+			forward("index.jsp", request, response);
+			break;		
+			
+		case "change_style":
+			changeStyle(request, response);
+			String origin = request.getParameter("origin");
+			processRequest(origin, request, response);
+			break;
+			
+		default: 
+			Handler handler;
+			try {
+				handler = handlerFactory.createHandler(action);
+				String newAction = handler.handleRequest(action, request, response);
+				if (isRedirectEndpoint(newAction))
+					forward(newAction, request, response);
+				else
+					processRequest(newAction, request, response);
+			} catch (InstantiationException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}			
+	}
+	
+	private boolean isRedirectEndpoint(String action) {
+		return action.endsWith(".jsp") || action.endsWith(".html");
+	}
+	
+
+	@Deprecated
+	private void processRequest_old(String action, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
 		action = (action == null) ? "home" : action;

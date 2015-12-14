@@ -2,19 +2,20 @@ package util;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClassFinder {
 
 	public List<Class<?>> getAllClasses(String packageName) throws IOException {
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		String path = packageName.replace(".", System.getProperty(SLASH));
-		URL fullPath = classLoader.getResource(path);
-		File folder = new File(fullPath.getFile());
+		//ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		//String path = packageName.replace(".", SLASH);
+		String fullpath = "D:\\Dev\\Eclipse\\workspace\\Web-3-Project\\POS Web Interface\\bin\\controller\\handler";
+		//URL fullPath = classLoader.getResource(path);
+		File folder = new File(fullpath);
 		List<Class<?>> classes = new ArrayList<Class<?>>();
-		for (File file : folder.listFiles()) {
+		File[] files = folder.listFiles();
+		for (File file : files) {
 			classes.addAll(find(file, packageName));
 		}
 		return classes;
