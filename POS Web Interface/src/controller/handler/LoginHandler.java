@@ -33,6 +33,10 @@ public class LoginHandler extends Handler{
 			errors.add("A user with this email does not exist");
 		} else if (user.isCorrectPassword(password)) {
 			request.getSession().setAttribute("user", user);
+			String userId = user.getUserId();
+			if (webshopFacade.getCartFromUser(userId) == null) {
+				webshopFacade.createCart(userId);
+			}
 		} else {
 			values.set(0, username);
 			errors.add("The password is incorrect");

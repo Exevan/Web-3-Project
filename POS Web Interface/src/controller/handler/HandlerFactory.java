@@ -16,15 +16,15 @@ public class HandlerFactory {
 	private Map<String, Class<?>> requestMapping;
 	private final WebshopFacade facade;
 
-	public HandlerFactory(WebshopFacade facade) throws IOException {
+	public HandlerFactory(WebshopFacade facade, String path) throws IOException {
 		this.facade = facade;
 		this.requestMapping = new HashMap<String, Class<?>>();
 		this.classFinder = new ClassFinder();
-		initializeHandlerMapping();
+		initializeHandlerMapping(path);
 	}
 
-	private void initializeHandlerMapping() throws IOException {
-		List<Class<?>> classes = classFinder.getAllClasses("controller.handler");
+	private void initializeHandlerMapping(String path) throws IOException {
+		List<Class<?>> classes = classFinder.getAllClasses("controller.handler", path);
 		for (Class<?> klass : classes) {
 			RequestMappings annotations = klass.getAnnotation(RequestMappings.class);
 			if (annotations != null) {

@@ -58,7 +58,7 @@ public class Controller extends HttpServlet {
 
 		webshopFacade = new WebshopFacade(properties);
 		try {
-			handlerFactory = new HandlerFactory(webshopFacade);
+			handlerFactory = new HandlerFactory(webshopFacade, properties.getProperty("path"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -105,6 +105,16 @@ public class Controller extends HttpServlet {
 					processRequest(newAction, request, response);
 			} catch (InstantiationException | IllegalAccessException e) {
 				e.printStackTrace();
+			} catch (NotAuthorizedException e) {
+				List<String> errors = new ArrayList<>();
+				errors.add(e.getMessage());
+				request.setAttribute("errors", errors);
+				forward("index.jsp", request, response);
+			} catch (NumberFormatException e) {
+				List<String> errors = new ArrayList<>();
+				errors.add(e.getMessage());
+				request.setAttribute("errors", errors);
+				forward("index.jsp", request, response);
 			}
 		}			
 	}
@@ -114,6 +124,7 @@ public class Controller extends HttpServlet {
 	}
 	
 
+	@SuppressWarnings("unused")
 	@Deprecated
 	private void processRequest_old(String action, HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {

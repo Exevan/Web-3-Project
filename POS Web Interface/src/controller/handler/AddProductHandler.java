@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import annotation.RequestMapping;
 import domain.product.Product;
 
+@RequestMapping(action="addproduct_start")
 @RequestMapping(action="addproduct_complete")
 public class AddProductHandler extends Handler {
 
@@ -16,6 +17,9 @@ public class AddProductHandler extends Handler {
 	@Override
 	public String handleRequest(String action, HttpServletRequest request,
 			HttpServletResponse response) {
+		if (action.equals("addproduct_start"))
+			return "addproduct.jsp";
+		
 		List<String> errors = new ArrayList<String>();
 		List<String> values = new ArrayList<String>();
 		values.add("");

@@ -13,6 +13,7 @@ password - [PASSWORD]
 ssl - true
 sslfactory - org.postgresql.ssl.NonValidatingFactory
 driver - org.postgresql.Driver
+path - D:\\Dev\\Eclipse\\workspace\\Web-3-Project\\POS Web Interface\\bin\\controller\\handler or whatever that is on your computer
 
 Also add following elements:
 
