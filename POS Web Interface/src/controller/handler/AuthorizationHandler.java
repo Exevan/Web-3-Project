@@ -15,7 +15,7 @@ public class AuthorizationHandler extends Handler {
 	public String handleRequest(String action, HttpServletRequest request,
 			HttpServletResponse response) {
 		if (isFromUserWithRole(request, Role.ADMINISTRATOR))
-			return "register";
+			return "register.jsp";
 		else
 			throw new NotAuthorizedException(
 					"You aren't authorized to view this page");
