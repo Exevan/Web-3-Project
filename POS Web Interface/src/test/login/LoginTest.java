@@ -1,4 +1,4 @@
-package test;
+package test.login;
 
 import static org.junit.Assert.assertTrue;
 

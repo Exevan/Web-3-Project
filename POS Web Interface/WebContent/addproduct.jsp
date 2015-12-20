@@ -42,7 +42,7 @@
 					name="price" value="${values[3]}">
 			</p>
 			<input type="hidden" name="action" value="addproduct_complete">
-			<input type="submit" value="Add">
+			<input type="submit" value="Add" id="add">
 		</form>
 		</main>
 		<jsp:include page="footer.jsp">

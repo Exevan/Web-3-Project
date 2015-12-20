@@ -1,16 +1,15 @@
-package test;
+package test.login;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class RegisterPage {
-	private WebDriver driver;
-	private static final String URL = "http://localhost:8080/POS_Web_Interface";
+import test.PageObject;
+
+public class RegisterPage extends PageObject{
 
 	public RegisterPage(WebDriver driver) {
-		this.driver = driver;
-		driver.get(URL + "/Controller?action=addperson_start");
+		super(driver, "/Controller?action=addperson_start");
 	}
 	
 	public void setFirstName(String firstName) {

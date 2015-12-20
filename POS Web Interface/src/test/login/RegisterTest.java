@@ -1,4 +1,4 @@
-package test;
+package test.login;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,6 +10,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+
+import test.LoginPage;
 
 public class RegisterTest {
 	private WebDriver driver;
@@ -51,19 +53,18 @@ public class RegisterTest {
 	@Test
 	public void testRegisterCorrect() {
 		String randomEmail = generateRandomEmail("jan.janssens@hotmail.com");
-		UserOverviewPage userOverviewPage = submitForm(new RegisterPage(driver), "Jan", "Janssens", randomEmail, "1234", true);
+		UserOverviewPage userOverviewPage = submitForm(
+				new RegisterPage(driver), "Jan", "Janssens", randomEmail, "1234", true);
 
 		assertTrue(userOverviewPage.isCurrentPage());
 
 		assertTrue(userOverviewPage.hasRow(randomEmail + " Jan Janssens CUSTOMER"));
-
 	}
 
 	@Test
 	public void testRegisterFirstNameEmpty() {
 		RegisterPage registerPage = new RegisterPage(driver);
 		submitForm(registerPage, "", "Janssens", "jan.janssens@hotmail.com", "1234", false);
-		// HOLD UP! We will never see the error.
 		
 		String title = driver.getTitle();
 		assertEquals("Sign Up", title);

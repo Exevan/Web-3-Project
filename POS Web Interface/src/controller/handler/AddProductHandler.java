@@ -28,13 +28,17 @@ public class AddProductHandler extends Handler {
 		values.add("");
 
 		int id = 0;
+		String raw_id = "";
 		try {
-			String raw_id = request.getParameter("id");
+			raw_id = request.getParameter("id");
 			id = Integer.parseInt(raw_id);
 			Product.isValidId(id);
 			values.set(0, raw_id);
 		} catch (IllegalArgumentException e) {
-			errors.add(e.getMessage());
+			if (raw_id.equals(""))
+				errors.add("No id given");
+			else
+				errors.add(raw_id + " is not a valid number");
 		}
 
 		String name = "";
@@ -56,14 +60,17 @@ public class AddProductHandler extends Handler {
 		}
 
 		double price = 0;
+		String raw_price = "";
 		try {
-			String raw_price = request.getParameter("price");
+			raw_price = request.getParameter("price");
 			price = Double.parseDouble(raw_price);
 			Product.isValidPrice(price);
 			values.set(3, Double.toString(price));
 		} catch (NumberFormatException e1) {
-			errors.add(e1.getMessage());
-
+			if (raw_price.equals(""))
+				errors.add("No price given");
+			else
+				errors.add(raw_price + " is not a valid number");
 		} catch (IllegalArgumentException e2) {
 			errors.add(e2.getMessage());
 		}

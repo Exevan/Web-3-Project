@@ -1,4 +1,4 @@
-package test;
+package test.login;
 
 import java.util.ArrayList;
 
@@ -6,13 +6,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class UserOverviewPage {
-	private WebDriver driver;
-	private static final String URL = "http://localhost:8080/POS_Web_Interface";
+import test.PageObject;
+
+public class UserOverviewPage extends PageObject{
 
 	public UserOverviewPage(WebDriver driver) {
-		this.driver = driver;
-		driver.get(URL + "/Controller?action=personoverview");
+		super(driver, "/Controller?action=personoverview");
 	}
 	
 	public boolean isCurrentPage() {
@@ -23,8 +22,8 @@ public class UserOverviewPage {
 	public boolean hasRow(String string) {
 		ArrayList<WebElement> tableRows=(ArrayList<WebElement>) driver.findElements(By.cssSelector("table tr"));
 		for (WebElement tableRow:tableRows) {
-			String email = tableRow.getText();
-			if (email.equals(string)) {
+			String row = tableRow.getText();
+			if (row.equals(string)) {
 				return true;
 			}
 		}
